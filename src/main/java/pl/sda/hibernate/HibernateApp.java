@@ -4,11 +4,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class HibernateApp {
 
@@ -88,11 +90,49 @@ public class HibernateApp {
     }
 
     private static void findCourseByIdAndUpdate(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            System.out.printf("\nCourse with id %d found:\n%s\n", id, course);
+            // -----------==============--------------
+            course.setName("course name updated");
+            tx.commit();
+            session.evict(course);
+            tx = session.beginTransaction();
+            course.setName("course name updated after evict");
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseByNameLike(String term) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Query<Course> query = session.createQuery("from Course where name like :nameparam", Course.class);
+            query.setParameter("nameparam", term);
+            final List<Course> list = query.list();
+            System.out.printf("Query for courses with name like %s\n", term);
+            list.forEach(course -> System.out.printf("course found: %s\n", course));
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void createStudentsForCourseId(int id) {
