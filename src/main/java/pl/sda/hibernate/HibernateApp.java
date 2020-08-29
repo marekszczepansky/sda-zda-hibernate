@@ -90,6 +90,4 @@ public class HibernateApp {
     private static String getCloseInfo(){
         return String.format("\n-= Method %s finished =-", Thread.currentThread().getStackTrace()[2].getMethodName());
     }
-
-
 }
