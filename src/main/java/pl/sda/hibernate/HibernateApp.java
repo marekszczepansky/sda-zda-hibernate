@@ -8,6 +8,8 @@ import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
+import java.time.LocalDate;
+
 public class HibernateApp {
 
     static SessionFactory sessionFactory;
@@ -35,7 +37,35 @@ public class HibernateApp {
     }
 
     private static void createCourses() {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            Course course = new Course();
+
+            course.setName("course 1");
+            course.setStartDate(LocalDate.of(2020, 3, 8));
+            session.persist(course);
+
+            course = new Course();
+            course.setName("course 2");
+            course.setStartDate(LocalDate.of(2020, 4, 1));
+            session.persist(course);
+
+            course = new Course();
+            course.setName("course 3");
+            course.setStartDate(LocalDate.of(2020, 4, 29));
+            session.persist(course);
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseById(int id) {
