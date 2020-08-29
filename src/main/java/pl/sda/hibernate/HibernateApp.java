@@ -11,6 +11,7 @@ import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class HibernateApp {
 
@@ -135,6 +136,21 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
+    private static void findCourseByNameLikeConsumer(String term) {
+        System.out.println(getOpenInfo());
+
+        doInTransaction(session -> {
+            final Query<Course> query = session.createQuery(
+                    "from Course where name like :nameparam", Course.class);
+            query.setParameter("nameparam", term);
+            final List<Course> list = query.list();
+            System.out.printf("Query for courses with name like %s\n", term);
+            list.forEach(course -> System.out.printf("course found: %s\n", course));
+        });
+
+        System.out.println(getCloseInfo());
+    }
+
     private static void createStudentsForCourseId(int id) {
 
     }
@@ -149,6 +165,22 @@ public class HibernateApp {
 
     private static void getAllTeachersForCourse(int id) {
 
+    }
+
+    private static void doInTransaction(Consumer<Session> action){
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+
+            action.accept(session);
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
     }
 
     private static void template() {
