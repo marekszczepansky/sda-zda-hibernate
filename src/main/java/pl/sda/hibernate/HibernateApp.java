@@ -33,6 +33,7 @@ public class HibernateApp {
         findCourseById(1);
         findCourseByIdAndUpdate(2);
         findCourseByNameLike("course%");
+        findCourseByNameLikeConsumer("co%");
         createStudentsForCourseId(1);
         getAllStudentsForCourse(1);
         createTeachersForCourse(1);
