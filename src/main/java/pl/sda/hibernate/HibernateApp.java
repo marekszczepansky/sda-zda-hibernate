@@ -153,7 +153,21 @@ public class HibernateApp {
     }
 
     private static void createStudentsForCourseId(int id) {
+        System.out.println(getOpenInfo());
 
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+
+            Student student = new Student();
+            student.setName("Natalia");
+            student.setEmail("natalia@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Natalia created for course %s\n", course.getName());
+
+        });
+
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllStudentsForCourse(int id) {
@@ -168,7 +182,7 @@ public class HibernateApp {
 
     }
 
-    private static void templateConsumer(){
+    private static void templateConsumer() {
         System.out.println(getOpenInfo());
 
         doInTransaction(session -> {
@@ -178,7 +192,7 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void doInTransaction(Consumer<Session> action){
+    private static void doInTransaction(Consumer<Session> action) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
@@ -212,10 +226,11 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static String getOpenInfo(){
+    private static String getOpenInfo() {
         return String.format("\n<-----------\n-= Method %s called =-\n", Thread.currentThread().getStackTrace()[2].getMethodName());
     }
-    private static String getCloseInfo(){
+
+    private static String getCloseInfo() {
         return String.format("\n-= Method %s finished =-", Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 }
