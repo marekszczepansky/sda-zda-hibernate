@@ -239,11 +239,58 @@ public class HibernateApp {
     }
 
     private static void createTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
 
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+            System.out.printf("Found course for id %d, name %s\n", id, course.getName());
+
+            Teacher teacher = new Teacher();
+            teacher.setName("Wojtek");
+            teacher.setSubject("Java podstawy");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher Wojtek created with course %s\n", course.getName());
+
+            teacher = new Teacher();
+            teacher.setName("Franek");
+            teacher.setSubject("Bazy danych");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher Franek created with course %s\n", course.getName());
+
+            session.flush();
+
+            teacher = new Teacher();
+            teacher.setName("Artur");
+            teacher.setSubject("SQL");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher Artur created with course %s\n", course.getName());
+
+            teacher = new Teacher();
+            teacher.setName("Eryk");
+            teacher.setSubject("Spring");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher Eryk created with course %s\n", course.getName());
+        });
+
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
 
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+            System.out.printf("Found course for id %d, name %s\n", id, course.getName());
+            final Set<Teacher> teachers = course.getTeachers();
+            System.out.printf("Number of teachers is %d\n", teachers.size());
+            teachers.forEach(teacher -> System.out.printf("Teacher: %s, subject: %s\n", teacher.getName(), teacher.getSubject()));
+        });
+
+        System.out.println(getCloseInfo());
     }
 
     private static void templateConsumer() {

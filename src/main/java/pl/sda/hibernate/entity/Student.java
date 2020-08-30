@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import java.util.Objects;
@@ -21,6 +22,7 @@ public class Student {
     @Column(length = 64)
     private String email;
     @ManyToOne
+    @JoinColumn(name = "courseId")
     private Course course;
 
     public Course getCourse() {
