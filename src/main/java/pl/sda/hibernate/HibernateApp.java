@@ -165,6 +165,19 @@ public class HibernateApp {
             session.persist(student);
             System.out.printf("Student Natalia created for course %s\n", course.getName());
 
+            student = new Student();
+            student.setName("Marek");
+            student.setEmail("marek@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Marek created for course %s\n", course.getName());
+
+            student = new Student();
+            student.setName("Kacper");
+            student.setEmail("kacper@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Kacper created for course %s\n", course.getName());
         });
 
         System.out.println(getCloseInfo());
