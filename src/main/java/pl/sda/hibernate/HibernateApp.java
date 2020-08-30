@@ -11,6 +11,7 @@ import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class HibernateApp {
@@ -220,7 +221,21 @@ public class HibernateApp {
     }
 
     private static void getAllStudentsForCourse(int id) {
+        System.out.println(getOpenInfo());
 
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+            System.out.printf("Course for id %d name is %s\n", id, course.getName());
+            final Set<Student> courseStudents = course.getStudents();
+            System.out.printf("Number of students in course %s is %d\n", course.getName(), courseStudents.size());
+            courseStudents.forEach(student -> System.out.printf(
+                    "Student name: %s, student email: %s\n",
+                    student.getName(),
+                    student.getEmail()
+                    ));
+        });
+
+        System.out.println(getCloseInfo());
     }
 
     private static void createTeachersForCourse(int id) {
