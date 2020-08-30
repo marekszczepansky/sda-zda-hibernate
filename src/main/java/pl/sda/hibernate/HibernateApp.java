@@ -168,6 +168,16 @@ public class HibernateApp {
 
     }
 
+    private static void templateConsumer(){
+        System.out.println(getOpenInfo());
+
+        doInTransaction(session -> {
+            // body here
+        });
+
+        System.out.println(getCloseInfo());
+    }
+
     private static void doInTransaction(Consumer<Session> action){
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
