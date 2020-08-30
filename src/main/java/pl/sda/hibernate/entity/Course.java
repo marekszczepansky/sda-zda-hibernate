@@ -24,7 +24,7 @@ public class Course extends BaseEntity {
     private LocalDate startDate;
     @OneToMany(mappedBy = "course")
     private Set<Student> students = new HashSet<>();
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "courses")
     private Set<Teacher> teachers = new HashSet<>();
 
     public Set<Teacher> getTeachers() {

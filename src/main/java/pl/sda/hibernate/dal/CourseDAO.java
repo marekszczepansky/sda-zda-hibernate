@@ -10,4 +10,5 @@ public interface CourseDAO {
     void create(List<Course> courses);
     Optional<Course> findById(int id);
     List<Course> findByNameLike(String term);
+    List<Course> findByName(String name);
 }
