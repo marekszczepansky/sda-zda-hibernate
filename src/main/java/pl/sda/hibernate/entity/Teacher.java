@@ -13,10 +13,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Teacher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Teacher extends BaseEntity {
+
     private String name;
     private String subject;
     @ManyToMany
@@ -28,14 +26,6 @@ public class Teacher {
 
     public Set<Course> getCourses() {
         return courses;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -58,22 +48,21 @@ public class Teacher {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
-        return id == teacher.id &&
-                Objects.equals(name, teacher.name) &&
+        return Objects.equals(name, teacher.name) &&
                 Objects.equals(subject, teacher.subject);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, subject);
+        return Objects.hash(super.hashCode(), name, subject);
     }
 
     @Override
     public String toString() {
         return "Teacher{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", subject='" + subject + '\'' +
                 '}';
     }

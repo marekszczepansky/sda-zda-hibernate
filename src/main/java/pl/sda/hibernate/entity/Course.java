@@ -16,11 +16,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TestCourse")
-public class Course {
+public class Course extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @Column(nullable = false, length = 100, unique = true)
     private String name;
     @Column(name = "start_date", nullable = false)
@@ -36,14 +33,6 @@ public class Course {
 
     public Set<Student> getStudents() {
         return students;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -66,22 +55,21 @@ public class Course {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Course course = (Course) o;
-        return id == course.id &&
-                Objects.equals(name, course.name) &&
+        return Objects.equals(name, course.name) &&
                 Objects.equals(startDate, course.startDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startDate);
+        return Objects.hash(super.hashCode(), name, startDate);
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", startDate=" + startDate +
                 '}';
     }

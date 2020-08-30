@@ -12,11 +12,8 @@ import javax.persistence.Transient;
 import java.util.Objects;
 
 @Entity
-public class Student {
+public class Student extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     @Basic(optional = false)
     private String name;
     @Column(length = 64)
@@ -31,14 +28,6 @@ public class Student {
 
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -61,22 +50,22 @@ public class Student {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return id == student.id &&
-                Objects.equals(name, student.name) &&
-                Objects.equals(email, student.email);
+        return Objects.equals(name, student.name) &&
+                Objects.equals(email, student.email) &&
+                Objects.equals(course, student.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email);
+        return Objects.hash(super.hashCode(), name, email, course);
     }
 
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
