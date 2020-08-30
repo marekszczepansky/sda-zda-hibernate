@@ -35,6 +35,7 @@ public class HibernateApp {
         findCourseByNameLike("course%");
         findCourseByNameLikeConsumer("co%");
         createStudentsForCourseId(1);
+        createStudentsForCourseName("course 3");
         getAllStudentsForCourse(1);
         createTeachersForCourse(1);
         getAllTeachersForCourse(1);
@@ -178,6 +179,41 @@ public class HibernateApp {
             student.setCourse(course);
             session.persist(student);
             System.out.printf("Student Kacper created for course %s\n", course.getName());
+        });
+
+        System.out.println(getCloseInfo());
+    }
+
+    private static void createStudentsForCourseName(String courseName) {
+        System.out.println(getOpenInfo());
+
+        doInTransaction(session -> {
+            final Query<Course> query = session.createQuery("from Course where name = :nameparam", Course.class);
+            query.setParameter("nameparam", courseName);
+            final List<Course> courseList = query.list();
+            System.out.printf("Found %d courses having name %s\n", courseList.size(), courseName);
+            final Course course = courseList.get(0);
+
+            Student student = new Student();
+            student.setName("Jakub");
+            student.setEmail("jakub@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Jakub created for course %s\n", course.getName());
+
+            student = new Student();
+            student.setName("Przemek");
+            student.setEmail("przemek@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Przemek created for course %s\n", course.getName());
+
+            student = new Student();
+            student.setName("Stanisław");
+            student.setEmail("stanislaw@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student Stanisław created for course %s\n", course.getName());
         });
 
         System.out.println(getCloseInfo());
