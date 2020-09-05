@@ -23,24 +23,22 @@ public class Context {
         return instance;
     }
 
-    FoodDao getFoodDao() {
+    public FoodDao getFoodDao() {
         return (FoodDao) componentStore.
                 computeIfAbsent("FoodDao", s -> new DefaultFoodDao(HibernateConfiguration.getInstance()));
     }
 
-    ;
-
-    IngredientDao getIngredientDao() {
+    public IngredientDao getIngredientDao() {
         return (IngredientDao) componentStore
                 .computeIfAbsent("IngredientDao", s -> new DefaultIngredientDao(HibernateConfiguration.getInstance()));
     }
 
-    PlaceDao getPlaceDao() {
+    public PlaceDao getPlaceDao() {
         return (PlaceDao) componentStore
                 .computeIfAbsent("PlaceDao", s -> new DefaultPlaceDao(HibernateConfiguration.getInstance()));
     }
 
-    BootstrapService getBootstrapService() {
+    public BootstrapService getBootstrapService() {
         return (BootstrapService) componentStore
                 .computeIfAbsent("BootstrapService", s -> new BootstrapService(
                         getIngredientDao(), getFoodDao(), getPlaceDao()
