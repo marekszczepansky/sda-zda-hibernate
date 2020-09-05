@@ -13,6 +13,12 @@ public class Food extends BaseEntity{
     private double price;
     @ManyToMany
     private Set<Ingredient> ingredients = new HashSet<>();
+    @ManyToMany(mappedBy = "foods")
+    private Set<Order> orders = new HashSet<>();
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
 
     public Set<Ingredient> getIngredients() {
         return ingredients;

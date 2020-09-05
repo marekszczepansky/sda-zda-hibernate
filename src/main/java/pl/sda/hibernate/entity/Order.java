@@ -1,9 +1,12 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "FoodOrder")
@@ -12,6 +15,12 @@ public class Order extends BaseEntity{
     private String customerPhoneNumber;
     private LocalDateTime pickUpTime;
     private String customerFirstName;
+    @ManyToMany
+    private Set<Food> foods = new HashSet<>();
+
+    public Set<Food> getFoods() {
+        return foods;
+    }
 
     public LocalDateTime getOrderTime() {
         return orderTime;
