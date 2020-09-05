@@ -1,7 +1,11 @@
 package pl.sda.hibernate.entity;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,6 +21,17 @@ public class Order extends BaseEntity{
     private String customerFirstName;
     @ManyToMany
     private Set<Food> foods = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Place place;
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
 
     public Set<Food> getFoods() {
         return foods;

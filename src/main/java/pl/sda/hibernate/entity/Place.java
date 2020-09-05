@@ -1,13 +1,22 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Place extends BaseEntity {
     private String name;
     private String address;
     private String phoneNumber;
+    @OneToMany(mappedBy = "place")
+    private Set<Order> orders = new HashSet<>();
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
 
     public String getName() {
         return name;
