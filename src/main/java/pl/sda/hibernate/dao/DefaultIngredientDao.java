@@ -13,7 +13,7 @@ public class DefaultIngredientDao {
         this.hibernateConfiguration = hibernateConfiguration;
     }
 
-    void create(Ingredient ingredient) {
+    public void create(Ingredient ingredient) {
 
         Transaction transaction = null;
         try (Session session = hibernateConfiguration
@@ -28,10 +28,9 @@ public class DefaultIngredientDao {
             }
             throw throwable;
         }
-
     }
 
-    Ingredient findById(int id) {
+    public Ingredient findById(int id) {
         return null;
     }
 }
