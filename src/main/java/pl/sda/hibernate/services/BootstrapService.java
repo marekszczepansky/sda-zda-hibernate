@@ -2,18 +2,22 @@ package pl.sda.hibernate.services;
 
 import pl.sda.hibernate.dao.FoodDao;
 import pl.sda.hibernate.dao.IngredientDao;
+import pl.sda.hibernate.dao.PlaceDao;
 import pl.sda.hibernate.entity.Food;
 import pl.sda.hibernate.entity.Ingredient;
+import pl.sda.hibernate.entity.Place;
 
 import java.util.Set;
 
 public class BootstrapService {
     private final IngredientDao ingredientDao;
     private final FoodDao foodDao;
+    private final PlaceDao placeDao;
 
-    public BootstrapService(IngredientDao ingredientDao, FoodDao foodDao) {
+    public BootstrapService(IngredientDao ingredientDao, FoodDao foodDao, PlaceDao placeDao) {
         this.ingredientDao = ingredientDao;
         this.foodDao = foodDao;
+        this.placeDao = placeDao;
     }
 
     public void createIngredients() {
@@ -68,6 +72,20 @@ public class BootstrapService {
         ingredients.add(ingredientDao.findById(3));
         ingredients.add(ingredientDao.findById(5));
         foodDao.create(food);
+    }
 
+    public void createPlaces(){
+        Place place = new Place();
+
+        place.setName("Stary Rynek");
+        place.setAddress("ul. Wielka 12");
+        place.setPhoneNumber("+48 505 999 854");
+        placeDao.create(place);
+
+        place = new Place();
+        place.setName("Piatkowo");
+        place.setAddress("os. Stefana Batorego 44");
+        place.setPhoneNumber("+48 505 999 855");
+        placeDao.create(place);
     }
 }
