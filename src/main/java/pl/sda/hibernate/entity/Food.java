@@ -1,13 +1,22 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Food extends BaseEntity{
     private String name;
     private String description;
     private double price;
+    @ManyToMany
+    private Set<Ingredient> ingredients = new HashSet<>();
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
 
     public String getName() {
         return name;
