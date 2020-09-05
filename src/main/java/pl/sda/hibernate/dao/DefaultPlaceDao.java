@@ -3,7 +3,6 @@ package pl.sda.hibernate.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
-import pl.sda.hibernate.entity.Ingredient;
 import pl.sda.hibernate.entity.Place;
 
 public class DefaultPlaceDao implements PlaceDao {
