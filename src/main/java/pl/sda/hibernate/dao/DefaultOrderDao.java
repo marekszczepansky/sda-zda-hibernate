@@ -3,26 +3,25 @@ package pl.sda.hibernate.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
-import pl.sda.hibernate.entity.Food;
+import pl.sda.hibernate.entity.Order;
+import pl.sda.hibernate.entity.Place;
 
-public class DefaultFoodDao implements FoodDao {
+public class DefaultOrderDao implements OrderDao {
     private final HibernateConfiguration hibernateConfiguration;
 
-    public DefaultFoodDao(HibernateConfiguration hibernateConfiguration) {
+    public DefaultOrderDao(HibernateConfiguration hibernateConfiguration) {
         this.hibernateConfiguration = hibernateConfiguration;
     }
 
     @Override
-    public void create(Food food) {
+    public void create(Order order) {
         Transaction transaction = null;
         try (Session session = hibernateConfiguration
                 .getSessionFactory()
                 .openSession()) {
-
             transaction = session.beginTransaction();
-            session.persist(food);
+            session.persist(order);
             transaction.commit();
-
         } catch (Throwable throwable) {
             if (transaction != null) {
                 transaction.rollback();
@@ -32,15 +31,15 @@ public class DefaultFoodDao implements FoodDao {
     }
 
     @Override
-    public Food findById(int id) {
-        Food result;
+    public Order findById(int id) {
+        Order result;
         Transaction transaction = null;
         try (Session session = hibernateConfiguration
                 .getSessionFactory()
                 .openSession()) {
             transaction = session.beginTransaction();
 
-            result = session.find(Food.class, id);
+            result = session.find(Order.class, id);
 
             transaction.commit();
         } catch (Throwable throwable) {
@@ -50,6 +49,5 @@ public class DefaultFoodDao implements FoodDao {
             throw throwable;
         }
         return result;
-
     }
 }

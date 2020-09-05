@@ -1,15 +1,9 @@
 package pl.sda.hibernate;
 
 import org.hibernate.SessionFactory;
-import pl.sda.hibernate.configuration.HibernateConfiguration;
-import pl.sda.hibernate.dao.DefaultFoodDao;
-import pl.sda.hibernate.dao.DefaultIngredientDao;
-import pl.sda.hibernate.dao.DefaultPlaceDao;
-import pl.sda.hibernate.dao.FoodDao;
-import pl.sda.hibernate.dao.IngredientDao;
-import pl.sda.hibernate.dao.PlaceDao;
 import pl.sda.hibernate.di.Context;
 import pl.sda.hibernate.services.BootstrapService;
+import pl.sda.hibernate.services.OrderService;
 
 public class HibernateApp {
 
@@ -17,8 +11,8 @@ public class HibernateApp {
 
     public static void main(String[] args) {
 
-
         BootstrapService bootstrapService = Context.getInstance().getBootstrapService();
+        OrderService orderService = Context.getInstance().getOrderService();
 
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
@@ -27,5 +21,6 @@ public class HibernateApp {
         bootstrapService.createFoods();
         bootstrapService.createPlaces();
 
+        orderService.exampleOrder1();
     }
 }
