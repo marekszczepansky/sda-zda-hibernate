@@ -4,6 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import pl.sda.hibernate.entity.Food;
+import pl.sda.hibernate.entity.Ingredient;
+import pl.sda.hibernate.entity.Order;
+import pl.sda.hibernate.entity.Place;
 
 public class HibernateApp {
 
@@ -13,7 +17,10 @@ public class HibernateApp {
 
         sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
-
+                .addAnnotatedClass(Food.class)
+                .addAnnotatedClass(Ingredient.class)
+                .addAnnotatedClass(Order.class)
+                .addAnnotatedClass(Place.class)
                 .buildSessionFactory();
 
         System.out.println("\n\n--------------------->\n" +
