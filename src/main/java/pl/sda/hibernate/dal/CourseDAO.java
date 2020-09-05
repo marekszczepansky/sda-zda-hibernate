@@ -11,4 +11,5 @@ public interface CourseDAO {
     Optional<Course> findById(int id);
     List<Course> findByNameLike(String term);
     List<Course> findByName(String name);
+    void updateNameById(int id, String name);
 }

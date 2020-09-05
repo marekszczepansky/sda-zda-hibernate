@@ -2,7 +2,6 @@ package pl.sda.hibernate.dal;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import pl.sda.hibernate.entity.Course;
 
@@ -11,34 +10,34 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class HibernateCourseDAO implements CourseDAO {
+public class HibernateCourseDAO implements CourseDAO, AutoCloseable {
 
-    private final SessionFactory sessionFactory;
+    private final HibernateSessionHelper hibernateSessionHelper;
 
     public HibernateCourseDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+        hibernateSessionHelper =  new HibernateSessionHelper(sessionFactory);
     }
 
     @Override
     public void create(Course course) {
-        doInTransaction(session -> session.persist(course));
+        hibernateSessionHelper.doInTransaction(session -> session.persist(course));
     }
 
     @Override
     public void create(List<Course> courses) {
-        doInTransaction(session -> courses.forEach(session::persist));
+        hibernateSessionHelper.doInTransaction(session -> courses.forEach(session::persist));
     }
 
     @Override
     public Optional<Course> findById(int id) {
         return Optional.ofNullable(
-                returnInTransaction(session -> session.find(Course.class, id))
+                hibernateSessionHelper.returnInTransaction(session -> session.find(Course.class, id))
         );
     }
 
     @Override
     public List<Course> findByNameLike(String term) {
-        return returnInTransaction(session -> {
+        return hibernateSessionHelper.returnInTransaction(session -> {
             final Query<Course> query = session.createQuery("from Course where name like :nameparam", Course.class);
             query.setParameter("nameparam", term);
             return query.list();
@@ -47,44 +46,31 @@ public class HibernateCourseDAO implements CourseDAO {
 
     @Override
     public List<Course> findByName(String name) {
-        return returnInTransaction(session -> {
+        return hibernateSessionHelper.returnInTransaction(session -> {
             final Query<Course> query = session.createQuery("from Course where name = :nameparam", Course.class);
             query.setParameter("nameparam", name);
             return query.list();
         });
     }
 
+    @Override
+    public void updateNameById(int id, String name) {
+        hibernateSessionHelper.doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+            course.setName(name);
+        });
+    }
+
     private void doInTransaction(Consumer<Session> action) {
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
-
-            action.accept(session);
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
+        hibernateSessionHelper.doInTransaction(action);
     }
 
     private <K> K returnInTransaction(Function<Session, K> action) {
-        K result = null;
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
+        return hibernateSessionHelper.returnInTransaction(action);
+    }
 
-            result = action.apply(session);
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
-        return result;
+    @Override
+    public void close() throws Exception {
+        hibernateSessionHelper.close();
     }
 }
