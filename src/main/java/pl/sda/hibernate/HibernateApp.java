@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.Food;
 import pl.sda.hibernate.entity.Ingredient;
 import pl.sda.hibernate.entity.Order;
@@ -15,13 +16,9 @@ public class HibernateApp {
 
     public static void main(String[] args) {
 
-        sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Food.class)
-                .addAnnotatedClass(Ingredient.class)
-                .addAnnotatedClass(Order.class)
-                .addAnnotatedClass(Place.class)
-                .buildSessionFactory();
+        final SessionFactory sessionFactory = HibernateConfiguration
+                .getInstance()
+                .getSessionFactory();
 
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
