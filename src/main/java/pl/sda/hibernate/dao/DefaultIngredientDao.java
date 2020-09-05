@@ -6,13 +6,14 @@ import org.hibernate.Transaction;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.Ingredient;
 
-public class DefaultIngredientDao {
+public class DefaultIngredientDao implements IngredientDao {
     private final HibernateConfiguration hibernateConfiguration;
 
     public DefaultIngredientDao(HibernateConfiguration hibernateConfiguration) {
         this.hibernateConfiguration = hibernateConfiguration;
     }
 
+    @Override
     public void create(Ingredient ingredient) {
 
         Transaction transaction = null;
@@ -30,6 +31,7 @@ public class DefaultIngredientDao {
         }
     }
 
+    @Override
     public Ingredient findById(int id) {
         Ingredient result;
         Transaction transaction = null;

@@ -1,17 +1,17 @@
 package pl.sda.hibernate.services;
 
-import pl.sda.hibernate.dao.DefaultFoodDao;
-import pl.sda.hibernate.dao.DefaultIngredientDao;
+import pl.sda.hibernate.dao.FoodDao;
+import pl.sda.hibernate.dao.IngredientDao;
 import pl.sda.hibernate.entity.Food;
 import pl.sda.hibernate.entity.Ingredient;
 
 import java.util.Set;
 
 public class BootstrapService {
-    private final DefaultIngredientDao ingredientDao;
-    private final DefaultFoodDao foodDao;
+    private final IngredientDao ingredientDao;
+    private final FoodDao foodDao;
 
-    public BootstrapService(DefaultIngredientDao ingredientDao, DefaultFoodDao foodDao) {
+    public BootstrapService(IngredientDao ingredientDao, FoodDao foodDao) {
         this.ingredientDao = ingredientDao;
         this.foodDao = foodDao;
     }

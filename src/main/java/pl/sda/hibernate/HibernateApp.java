@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.dao.DefaultFoodDao;
 import pl.sda.hibernate.dao.DefaultIngredientDao;
+import pl.sda.hibernate.dao.FoodDao;
+import pl.sda.hibernate.dao.IngredientDao;
 import pl.sda.hibernate.services.BootstrapService;
 
 public class HibernateApp {
@@ -13,9 +15,9 @@ public class HibernateApp {
     public static void main(String[] args) {
 
 
-        DefaultIngredientDao ingredientDao =
+        IngredientDao ingredientDao =
                 new DefaultIngredientDao(HibernateConfiguration.getInstance());
-        DefaultFoodDao foodDao =
+        FoodDao foodDao =
                 new DefaultFoodDao(HibernateConfiguration.getInstance());
         BootstrapService bootstrapService =
                 new BootstrapService(ingredientDao, foodDao);
