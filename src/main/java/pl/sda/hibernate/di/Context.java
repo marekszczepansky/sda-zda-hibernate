@@ -32,7 +32,7 @@ public class Context {
     }
 
     private void registerComponents() {
-        this.componentSupliers.put(HibernateConfiguration.class, HibernateConfiguration::getInstance);
+        this.componentSupliers.put(HibernateConfiguration.class, HibernateConfiguration::new);
         this.componentSupliers.put(FoodDao.class, () -> new DefaultFoodDao(
                 getComponent(HibernateConfiguration.class)
         ));

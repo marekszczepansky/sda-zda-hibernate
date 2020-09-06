@@ -8,10 +8,9 @@ import pl.sda.hibernate.entity.Order;
 import pl.sda.hibernate.entity.Place;
 
 public class HibernateConfiguration {
-    private final static HibernateConfiguration instance = new HibernateConfiguration();
     private final SessionFactory sessionFactory;
 
-    private HibernateConfiguration() {
+    public HibernateConfiguration() {
         sessionFactory = new Configuration()
                 .configure("hibernate.cfg.xml")
                 .addAnnotatedClass(Food.class)
@@ -19,10 +18,6 @@ public class HibernateConfiguration {
                 .addAnnotatedClass(Order.class)
                 .addAnnotatedClass(Place.class)
                 .buildSessionFactory();
-    }
-
-    public static HibernateConfiguration getInstance() {
-        return instance;
     }
 
     public SessionFactory getSessionFactory() {
