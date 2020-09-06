@@ -8,7 +8,7 @@ import pl.sda.hibernate.entity.Order;
 import pl.sda.hibernate.entity.Place;
 
 public class HibernateConfiguration {
-    private static HibernateConfiguration instance = new HibernateConfiguration();
+    private final static HibernateConfiguration instance = new HibernateConfiguration();
     private final SessionFactory sessionFactory;
 
     private HibernateConfiguration() {

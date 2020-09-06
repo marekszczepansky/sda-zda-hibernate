@@ -15,49 +15,49 @@ import pl.sda.hibernate.services.OrderService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 public class Context {
     private static Context instance = new Context();
-    private static Map<String, Object> componentStore = new ConcurrentHashMap<>();
+    private static Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
+    // dependency map (via supplies)
+    private Map<Class<?>, Supplier<?>> componentSupliers = new HashMap<>();
 
     private Context() {
+        registerComponents();
     }
 
     public static Context getInstance() {
         return instance;
     }
 
-    public FoodDao getFoodDao() {
-        return (FoodDao) componentStore.
-                computeIfAbsent("FoodDao", s -> new DefaultFoodDao(HibernateConfiguration.getInstance()));
+    private void registerComponents() {
+        this.componentSupliers.put(HibernateConfiguration.class, HibernateConfiguration::getInstance);
+        this.componentSupliers.put(FoodDao.class, () -> new DefaultFoodDao(
+                getComponent(HibernateConfiguration.class)
+        ));
+        this.componentSupliers.put(IngredientDao.class, () -> new DefaultIngredientDao(
+                getComponent(HibernateConfiguration.class)
+        ));
+        this.componentSupliers.put(PlaceDao.class, () -> new DefaultPlaceDao(
+                getComponent(HibernateConfiguration.class)
+        ));
+        this.componentSupliers.put(OrderDao.class, () -> new DefaultOrderDao(
+                getComponent(HibernateConfiguration.class)
+        ));
+        this.componentSupliers.put(BootstrapService.class, () -> new BootstrapService(
+                getComponent(IngredientDao.class),
+                getComponent(FoodDao.class),
+                getComponent(PlaceDao.class)
+        ));
+        this.componentSupliers.put(OrderService.class, () -> new OrderService(
+                getComponent(PlaceDao.class),
+                getComponent(FoodDao.class),
+                getComponent(OrderDao.class)
+        ));
     }
 
-    public IngredientDao getIngredientDao() {
-        return (IngredientDao) componentStore
-                .computeIfAbsent("IngredientDao", s -> new DefaultIngredientDao(HibernateConfiguration.getInstance()));
-    }
-
-    public PlaceDao getPlaceDao() {
-        return (PlaceDao) componentStore
-                .computeIfAbsent("PlaceDao", s -> new DefaultPlaceDao(HibernateConfiguration.getInstance()));
-    }
-
-    public OrderDao getOrderDao(){
-        return (OrderDao) componentStore
-                .computeIfAbsent("OrderDao", s -> new DefaultOrderDao(HibernateConfiguration.getInstance()));
-    }
-
-    public BootstrapService getBootstrapService() {
-        return (BootstrapService) componentStore
-                .computeIfAbsent("BootstrapService", s -> new BootstrapService(
-                        getIngredientDao(), getFoodDao(), getPlaceDao()
-                ));
-    }
-
-    public OrderService getOrderService(){
-        return (OrderService) componentStore
-                .computeIfAbsent("OrderService", s -> new OrderService(
-                        getPlaceDao(), getFoodDao(), getOrderDao()
-                ));
+    public <K> K getComponent(Class<K> key) {
+        return (K) componentStore.computeIfAbsent(key, aClass -> componentSupliers.get(aClass).get());
     }
 }
