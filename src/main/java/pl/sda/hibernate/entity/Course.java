@@ -1,38 +1,15 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "course")
-public class Course {
+public class Course extends NamedEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
     private LocalDate startDate;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -46,15 +23,14 @@ public class Course {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Course course = (Course) o;
-        return id == course.id &&
-                Objects.equals(name, course.name) &&
-                Objects.equals(startDate, course.startDate);
+        return Objects.equals(startDate, course.startDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startDate);
+        return Objects.hash(super.hashCode(), startDate);
     }
 
     @Override
