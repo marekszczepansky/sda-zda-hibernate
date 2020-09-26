@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import pl.sda.hibernate.dao.CourseDao;
+import pl.sda.hibernate.dao.HibernateCourseDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
@@ -16,6 +18,7 @@ import java.util.Set;
 public class HibernateApp {
 
     static SessionFactory sessionFactory;
+    private static CourseDao courseDao;
 
     public static void main(String[] args) {
 
@@ -29,6 +32,8 @@ public class HibernateApp {
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
 
+        courseDao = new HibernateCourseDao(sessionFactory);
+
         createCourses();
         findCourseById(1);
         findCourseByIdAndUpdate(2);
@@ -41,52 +46,31 @@ public class HibernateApp {
 
     private static void createCourses() {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
+        Course course = new Course();
 
-            Course course = new Course();
+        course.setName("course 1");
+        course.setStartDate(LocalDate.of(2020, 3, 8));
+        courseDao.create(course);
 
-            course.setName("course 1");
-            course.setStartDate(LocalDate.of(2020, 3, 8));
-            session.persist(course);
+        course = new Course();
+        course.setName("course 2");
+        course.setStartDate(LocalDate.of(2020, 4, 12));
+        courseDao.create(course);
 
-            course = new Course();
-            course.setName("course 2");
-            course.setStartDate(LocalDate.of(2020, 4, 12));
-            session.persist(course);
+        course = new Course();
+        course.setName("course 3");
+        course.setStartDate(LocalDate.of(2020, 4, 29));
+        courseDao.create(course);
 
-            course = new Course();
-            course.setName("course 3");
-            course.setStartDate(LocalDate.of(2020, 4, 29));
-            session.persist(course);
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 
     private static void findCourseById(int id) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
 
-            final Course course = session.find(Course.class, id);
-            System.out.printf("course with id %d foud: %s\n%s\n", id, course.getName(), course);
+        final Course course = courseDao.findById(id);
+        System.out.printf("course with id %d foud: %s\n%s\n", id, course.getName(), course);
 
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 
