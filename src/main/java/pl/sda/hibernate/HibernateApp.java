@@ -191,7 +191,35 @@ public class HibernateApp {
     }
 
     private static void createTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+
+            Teacher teacher = new Teacher();
+            teacher.setName("Wojtek");
+            teacher.setSubject("Java");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.println("Teacher Wojtek is persisted");
+
+            teacher = new Teacher();
+            teacher.setName("Joanna");
+            teacher.setSubject("Angular");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.println("Teacher Joanna is persisted");
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllTeachersForCourse(int id) {
