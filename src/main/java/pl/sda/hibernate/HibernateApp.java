@@ -8,7 +8,9 @@ import org.hibernate.query.Query;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.HibernateCourseDao;
 import pl.sda.hibernate.dao.HibernateStudentDao;
+import pl.sda.hibernate.dao.HibernateTeacherDao;
 import pl.sda.hibernate.dao.StudentDao;
+import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
@@ -22,6 +24,7 @@ public class HibernateApp {
     static SessionFactory sessionFactory;
     private static CourseDao courseDao;
     private static StudentDao studentDao;
+    private static TeacherDao teacherDao;
 
     public static void main(String[] args) {
 
@@ -37,6 +40,7 @@ public class HibernateApp {
 
         courseDao = new HibernateCourseDao(sessionFactory);
         studentDao = new HibernateStudentDao(sessionFactory);
+        teacherDao = new HibernateTeacherDao(sessionFactory);
 
         createCourses();
         findCourseById(1);
@@ -170,33 +174,22 @@ public class HibernateApp {
 
     private static void createTeachersForCourse(int id) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
+        final Course course = courseDao.findById(id);
 
-            final Course course = session.find(Course.class, id);
+        Teacher teacher = new Teacher();
+        teacher.setName("Wojtek");
+        teacher.setSubject("Java");
+        teacher.getCourses().add(course);
+        teacherDao.create(teacher);
+        System.out.println("Teacher Wojtek is persisted");
 
-            Teacher teacher = new Teacher();
-            teacher.setName("Wojtek");
-            teacher.setSubject("Java");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.println("Teacher Wojtek is persisted");
+        teacher = new Teacher();
+        teacher.setName("Joanna");
+        teacher.setSubject("Angular");
+        teacher.getCourses().add(course);
+        teacherDao.create(teacher);
+        System.out.println("Teacher Joanna is persisted");
 
-            teacher = new Teacher();
-            teacher.setName("Joanna");
-            teacher.setSubject("Angular");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.println("Teacher Joanna is persisted");
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 
