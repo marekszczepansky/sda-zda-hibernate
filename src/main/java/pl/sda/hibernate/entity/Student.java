@@ -1,10 +1,10 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Objects;
 
 @Entity
@@ -12,6 +12,9 @@ import java.util.Objects;
 public class Student extends NamedEntity {
 
     private String email;
+    @ManyToOne
+    @JoinColumn(name = "fk_course_id")
+    private Course course;
 
     public String getEmail() {
         return email;

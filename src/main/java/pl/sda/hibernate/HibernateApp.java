@@ -119,7 +119,7 @@ public class HibernateApp {
             tx = session.beginTransaction();
 
             final Query<Course> courseQuery = session.createQuery(
-                    "from Course where name like :nameparam",
+                    "select c from Course c where name like :nameparam",
                     Course.class);
             courseQuery.setParameter("nameparam", term);
             final List<Course> resultList = courseQuery.getResultList();
