@@ -4,29 +4,29 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import pl.sda.hibernate.entity.Course;
+import pl.sda.hibernate.entity.NamedEntity;
 
-public class HibernateCourseDao extends HibernateBaseDao<Course> implements CourseDao {
+public abstract class HibernateBaseDao<T extends NamedEntity> implements BaseDao<T> {
+    final public SessionFactory sessionFactory;
 
-    public HibernateCourseDao(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public HibernateBaseDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public Course findById(int id) {
+    public void create(T entity) {
         Transaction tx = null;
-        Course course;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            course = session.find(Course.class, id);
+            session.persist(entity);
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
+            if (tx != null) {
                 tx.rollback();
             }
             throw ex;
         }
-        return course;
     }
 }

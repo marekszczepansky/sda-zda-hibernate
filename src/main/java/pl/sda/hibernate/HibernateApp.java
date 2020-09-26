@@ -7,6 +7,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.HibernateCourseDao;
+import pl.sda.hibernate.dao.HibernateStudentDao;
+import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
@@ -19,6 +21,7 @@ public class HibernateApp {
 
     static SessionFactory sessionFactory;
     private static CourseDao courseDao;
+    private static StudentDao studentDao;
 
     public static void main(String[] args) {
 
@@ -33,6 +36,7 @@ public class HibernateApp {
                 "Hibernate Session Factory Created");
 
         courseDao = new HibernateCourseDao(sessionFactory);
+        studentDao = new HibernateStudentDao(sessionFactory);
 
         createCourses();
         findCourseById(1);
@@ -122,33 +126,23 @@ public class HibernateApp {
 
     private static void createStudentsForCourseId(int id) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
 
-            final Course course = session.find(Course.class, id);
+        final Course course = courseDao.findById(id);
 
-            Student student = new Student();
-            student.setName("Emil");
-            student.setEmail("emil@sda.pl");
-            student.setCourse(course);
-            session.persist(student);
-            System.out.println("Student Emil is persisted");
+        Student student = new Student();
+        student.setName("Emil");
+        student.setEmail("emil@sda.pl");
+        student.setCourse(course);
+        studentDao.create(student);
+        System.out.println("Student Emil is persisted");
 
-            student = new Student();
-            student.setName("Beata");
-            student.setEmail("beata@sda.pl");
-            student.setCourse(course);
-            session.persist(student);
-            System.out.println("Student Beata i spersisted");
+        student = new Student();
+        student.setName("Beata");
+        student.setEmail("beata@sda.pl");
+        student.setCourse(course);
+        studentDao.create(student);
+        System.out.println("Student Beata i spersisted");
 
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 

@@ -3,22 +3,21 @@ package pl.sda.hibernate.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import pl.sda.hibernate.entity.Course;
+import pl.sda.hibernate.entity.Student;
 
-public class HibernateCourseDao extends HibernateBaseDao<Course> implements CourseDao {
-
-    public HibernateCourseDao(SessionFactory sessionFactory) {
+public class HibernateStudentDao extends HibernateBaseDao<Student> implements StudentDao {
+    public HibernateStudentDao(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
     @Override
-    public Course findById(int id) {
+    public Student findById(int id) {
         Transaction tx = null;
-        Course course;
+        Student student;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            course = session.find(Course.class, id);
+            student = session.find(Student.class, id);
 
             tx.commit();
         } catch (Exception ex) {
@@ -27,6 +26,6 @@ public class HibernateCourseDao extends HibernateBaseDao<Course> implements Cour
             }
             throw ex;
         }
-        return course;
+        return student;
     }
 }
