@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 import java.util.Objects;
 
 @MappedSuperclass
@@ -12,6 +13,8 @@ public class NamedEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
     protected String name;
+    @Version
+    private int version;
 
     public int getId() {
         return id;
@@ -27,6 +30,10 @@ public class NamedEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     @Override

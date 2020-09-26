@@ -88,7 +88,26 @@ public class HibernateApp {
     }
 
     private static void findCourseByIdAndUpdate(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            System.out.printf("course with id %d foud: %s\n%s\n", id, course.getName(), course);
+            course.setName("course name updated");
+            tx.commit();
+            session.evict(course);
+            tx = session.beginTransaction();
+            course.setName("updated in new transaction after evict");
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseByNameLike(String term) {
