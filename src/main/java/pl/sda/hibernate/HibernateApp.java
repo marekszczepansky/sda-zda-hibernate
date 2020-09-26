@@ -4,11 +4,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class HibernateApp {
 
@@ -111,7 +113,26 @@ public class HibernateApp {
     }
 
     private static void findCourseByNameLike(String term) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Query<Course> courseQuery = session.createQuery(
+                    "from Course where name like :nameparam",
+                    Course.class);
+            courseQuery.setParameter("nameparam", term);
+            final List<Course> resultList = courseQuery.getResultList();
+            resultList.forEach(courseItem -> System.out.println("course found: " + courseItem));
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void createStudentsForCourseId(int id) {
@@ -148,10 +169,11 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static String getOpenInfo(){
+    private static String getOpenInfo() {
         return String.format("\n<-----------\n-= Method %s called =-\n", Thread.currentThread().getStackTrace()[2].getMethodName());
     }
-    private static String getCloseInfo(){
+
+    private static String getCloseInfo() {
         return String.format("\n-= Method %s finished =-", Thread.currentThread().getStackTrace()[2].getMethodName());
     }
 
