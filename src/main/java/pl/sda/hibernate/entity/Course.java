@@ -1,15 +1,21 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "course")
 public class Course extends NamedEntity {
 
     private LocalDate startDate;
+
+    @OneToMany(mappedBy = "course")
+    private Set<Student> students = new HashSet<>();
 
     public LocalDate getStartDate() {
         return startDate;
