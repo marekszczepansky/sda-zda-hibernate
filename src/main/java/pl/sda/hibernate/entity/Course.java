@@ -25,6 +25,10 @@ public class Course extends NamedEntity {
         this.startDate = startDate;
     }
 
+    public Set<Student> getStudents() {
+        return students;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

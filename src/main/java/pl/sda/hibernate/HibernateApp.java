@@ -11,6 +11,7 @@ import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 public class HibernateApp {
 
@@ -168,7 +169,25 @@ public class HibernateApp {
     }
 
     private static void getAllStudentsForCourse(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            final Set<Student> students = course.getStudents();
+            System.out.println("course.getStudents called");
+            System.out.println("Number of students: " + students.size());
+            students.forEach(studentItem -> System.out.println("student name: " + studentItem.getName()));
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void createTeachersForCourse(int id) {
