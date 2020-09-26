@@ -223,7 +223,26 @@ public class HibernateApp {
     }
 
     private static void getAllTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            final Set<Teacher> teachers = course.getTeachers();
+            System.out.println("Teacher list:");
+            teachers.forEach(
+                    teacherItem -> System.out.println("teacher name: " + teacherItem.getName())
+            );
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null && !tx.getRollbackOnly()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void template() {
