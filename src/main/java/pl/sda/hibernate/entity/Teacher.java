@@ -1,27 +1,16 @@
 package pl.sda.hibernate.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-public class Teacher {
-    private int id;
-    private String name;
+@Entity
+public class Teacher extends NamedEntity {
     private String subject;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @ManyToMany
+    private Set<Course> courses = new HashSet<>();
 
     public String getSubject() {
         return subject;
@@ -31,19 +20,22 @@ public class Teacher {
         this.subject = subject;
     }
 
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
-        return id == teacher.id &&
-                Objects.equals(name, teacher.name) &&
-                Objects.equals(subject, teacher.subject);
+        return Objects.equals(subject, teacher.subject);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, subject);
+        return Objects.hash(super.hashCode(), subject);
     }
 
     @Override

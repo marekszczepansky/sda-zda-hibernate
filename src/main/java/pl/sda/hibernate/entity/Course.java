@@ -1,6 +1,7 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ public class Course extends NamedEntity {
 
     @OneToMany(mappedBy = "course")
     private Set<Student> students = new HashSet<>();
+    @ManyToMany(mappedBy = "courses")
+    private Set<Teacher> teachers = new HashSet<>();
 
     public LocalDate getStartDate() {
         return startDate;
@@ -27,6 +30,10 @@ public class Course extends NamedEntity {
 
     public Set<Student> getStudents() {
         return students;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
     }
 
     @Override
