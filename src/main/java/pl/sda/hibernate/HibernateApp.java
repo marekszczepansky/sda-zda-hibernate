@@ -8,6 +8,8 @@ import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
+import java.time.LocalDate;
+
 public class HibernateApp {
 
     static SessionFactory sessionFactory;
@@ -35,7 +37,37 @@ public class HibernateApp {
     }
 
     private static void createCourses() {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            Course course = new Course();
+            course.setName("course 1");
+            course.setStartDate(LocalDate.of(2021, 2, 24));
+            session.persist(course);
+            System.out.println("course 1 persisted");
+
+            course = new Course();
+            course.setName("course 2");
+            course.setStartDate(LocalDate.of(2021, 3, 12));
+            session.persist(course);
+            System.out.println("course 2 persisted");
+
+            course = new Course();
+            course.setName("course 3");
+            course.setStartDate(LocalDate.of(2021, 1, 6));
+            session.persist(course);
+            System.out.println("course 3 persisted");
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseById(int id) {
@@ -76,7 +108,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
+            if (tx != null) {
                 tx.rollback();
             }
             throw ex;
