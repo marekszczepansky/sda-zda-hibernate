@@ -27,7 +27,7 @@ public class Course {
     @Column(nullable = false)
     private LocalDate startDate;
     @OneToMany(mappedBy = "course")
-    private Set<Student> students = new HashSet<>();
+    private final Set<Student> students = new HashSet<>();
 
     public int getId() {
         return id;
