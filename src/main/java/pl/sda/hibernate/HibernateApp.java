@@ -71,7 +71,22 @@ public class HibernateApp {
     }
 
     private static void findCourseById(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            System.out.printf("\nCourse with id %d found:\n%s\n", id, course);
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseByIdAndUpdate(int id) {
