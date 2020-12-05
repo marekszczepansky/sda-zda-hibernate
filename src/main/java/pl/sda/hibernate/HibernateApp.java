@@ -90,7 +90,28 @@ public class HibernateApp {
     }
 
     private static void findCourseByIdAndUpdate(int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Course course = session.find(Course.class, id);
+            System.out.printf("\nCourse with id %d found:\n%s\n", id, course);
+
+            course.setName("course name updated");
+            tx.commit();
+            session.evict(course);
+            tx = session.beginTransaction();
+            course.setName("course after evict");
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void findCourseByNameLike(String term) {
