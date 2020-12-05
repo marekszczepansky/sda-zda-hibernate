@@ -140,8 +140,42 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void createStudentsForCourseId(int id) {
+    private static void createStudentsForCourseId(final int id) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            final Course course = session.find(Course.class, id);
 
+            Student student = new Student();
+            student.setName("Natalia");
+            student.setEmail("natalia@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+
+            student = new Student();
+            student.setName("Marek");
+            student.setEmail("marek@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+
+            student = new Student();
+            student.setName("Kacper");
+            student.setEmail("kacper@sda.pl");
+            student.setCourse(course);
+            session.persist(student);
+            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllStudentsForCourse(int id) {

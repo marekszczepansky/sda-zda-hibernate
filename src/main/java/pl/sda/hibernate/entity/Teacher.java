@@ -1,8 +1,12 @@
 package pl.sda.hibernate.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
+@Entity
 public class Teacher {
+    @Id
     private int id;
     private String name;
     private String subject;

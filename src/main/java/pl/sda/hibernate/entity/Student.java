@@ -1,14 +1,23 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import java.util.Objects;
 
+@Entity
 public class Student {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String email;
+    @ManyToOne
+    private Course course;
 
     public int getId() {
         return id;
@@ -34,6 +43,14 @@ public class Student {
         this.email = email;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,12 +58,13 @@ public class Student {
         Student student = (Student) o;
         return id == student.id &&
                 Objects.equals(name, student.name) &&
-                Objects.equals(email, student.email);
+                Objects.equals(email, student.email) &&
+                Objects.equals(course, student.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email);
+        return Objects.hash(id, name, email, course);
     }
 
     @Override
