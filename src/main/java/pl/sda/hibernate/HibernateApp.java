@@ -66,7 +66,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
@@ -85,7 +85,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
@@ -110,7 +110,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
@@ -134,7 +134,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
@@ -215,9 +215,41 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void createTeachersForCourse(int id) {
+    private static void createTeachersForCourse(final int id) {
         System.out.println(getOpenInfo());
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
 
+            Teacher teacher = new Teacher();
+            teacher.setName("Wojtek");
+            teacher.setSubject("Java podstawy");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+
+            teacher = new Teacher();
+            teacher.setName("Franek");
+            teacher.setSubject("Bazy danych");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+
+            session.flush();  // testowe dodanie flush aby wymusić zapis do bazy
+
+            teacher = new Teacher();
+            teacher.setName("Artur");
+            teacher.setSubject("SQL");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+
+            teacher = new Teacher();
+            teacher.setName("Eryk");
+            teacher.setSubject("Spring");
+            teacher.getCourses().add(course);
+            session.persist(teacher);
+            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+        });
         System.out.println(getCloseInfo());
     }
 
@@ -236,7 +268,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;
@@ -253,7 +285,7 @@ public class HibernateApp {
 
             tx.commit();
         } catch (Exception ex) {
-            if (tx != null) {
+            if (tx != null && !tx.getRollbackOnly()) {
                 tx.rollback();
             }
             throw ex;

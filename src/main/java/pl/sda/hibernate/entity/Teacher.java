@@ -1,15 +1,28 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Teacher {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     private String subject;
+    @ManyToMany
+    @JoinTable(name = "course_teacher",
+            joinColumns = @JoinColumn(name = "teacherId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "courseId", referencedColumnName = "id"))
+    private final Set<Course> courses = new HashSet<>();
 
     public int getId() {
         return id;
@@ -33,6 +46,10 @@ public class Teacher {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
     }
 
     @Override
