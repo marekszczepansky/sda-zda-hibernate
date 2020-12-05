@@ -1,12 +1,26 @@
 package pl.sda.hibernate.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "course_table")
 public class Course {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(length = 100, unique = true, nullable = false)
     private String name;
+    @Column(nullable = false)
     private LocalDate startDate;
 
     public int getId() {
