@@ -11,6 +11,7 @@ import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class HibernateApp {
 
@@ -142,9 +143,8 @@ public class HibernateApp {
 
     private static void createStudentsForCourseId(final int id) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
+
+        doInTransaction(session -> {
             final Course course = session.find(Course.class, id);
 
             Student student = new Student();
@@ -167,18 +167,16 @@ public class HibernateApp {
             student.setCourse(course);
             session.persist(student);
             System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+        });
 
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 
     private static void getAllStudentsForCourse(int id) {
+
+//        doInTransaction((Session session) -> {
+//            session.find(Student.class, id);
+//        });
 
     }
 
@@ -188,6 +186,22 @@ public class HibernateApp {
 
     private static void getAllTeachersForCourse(int id) {
 
+    }
+
+    private static void doInTransaction(Consumer<Session> consumer){
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+
+            consumer.accept(session);
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
     }
 
     private static void template() {
