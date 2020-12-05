@@ -4,11 +4,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class HibernateApp {
 
@@ -114,8 +116,28 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void findCourseByNameLike(String term) {
+    private static void findCourseByNameLike(final String term) {
+        System.out.println(getOpenInfo());
+        Transaction tx = null;
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
 
+            final Query<Course> courseQuery = session.createQuery(
+                    "from Course c where name like :nameparam",
+                    Course.class);
+            courseQuery.setParameter("nameparam", term);
+            final List<Course> courseList = courseQuery.getResultList();
+            System.out.printf("Query for courses with name like %s\n", term);
+            courseList.forEach(course -> System.out.printf("course found: %s\n", course));
+
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+        System.out.println(getCloseInfo());
     }
 
     private static void createStudentsForCourseId(int id) {
