@@ -70,7 +70,7 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void findCourseById(int id) {
+    private static void findCourseById(final int id) {
         System.out.println(getOpenInfo());
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
