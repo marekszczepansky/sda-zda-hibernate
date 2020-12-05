@@ -34,7 +34,8 @@ public class HibernateApp {
         findCourseByIdAndUpdate(2);
         findCourseByNameLike("course%");
         createStudentsForCourseId(1);
-        getAllStudentsForCourse(1);
+        getAllStudentsForCourseIdByQuery(1);
+        getAllStudentsForCourseIdBySet(1);
         createTeachersForCourse(1);
         getAllTeachersForCourse(1);
     }
@@ -172,12 +173,32 @@ public class HibernateApp {
         System.out.println(getCloseInfo());
     }
 
-    private static void getAllStudentsForCourse(int id) {
+    private static void getAllStudentsForCourseIdByQuery(final int id) {
 
-//        doInTransaction((Session session) -> {
-//            session.find(Student.class, id);
-//        });
+        doInTransaction((Session session) -> {
+            final Query<Student> studentQuery = session.createQuery(
+                    "from Student s where s.course.id = :courseIdParam",
+                    Student.class);
+            studentQuery.setParameter("courseIdParam", id);
+            final List<Student> studentList = studentQuery.getResultList();
+            System.out.println("List of students for course Id: " + id);
+            System.out.println("Course name: " + studentList
+                    .stream()
+                    .findFirst()
+                    .map(Student::getCourse)
+                    .map(Course::getName)
+                    .orElse("<empty>")
+            );
+            studentList.forEach(student -> System.out.printf(
+                    "Student name: %s, student email: %s\n",
+                    student.getName(),
+                    student.getEmail()
+            ));
+        });
 
+    }
+
+    private static void getAllStudentsForCourseIdBySet(final int i) {
     }
 
     private static void createTeachersForCourse(int id) {
