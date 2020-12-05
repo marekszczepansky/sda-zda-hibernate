@@ -2,14 +2,18 @@ package pl.sda.hibernate.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "course_table")
@@ -22,6 +26,8 @@ public class Course {
     private String name;
     @Column(nullable = false)
     private LocalDate startDate;
+    @OneToMany(mappedBy = "course")
+    private Set<Student> students = new HashSet<>();
 
     public int getId() {
         return id;
@@ -45,6 +51,10 @@ public class Course {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
     }
 
     @Override

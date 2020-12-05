@@ -174,6 +174,7 @@ public class HibernateApp {
     }
 
     private static void getAllStudentsForCourseIdByQuery(final int id) {
+        System.out.println(getOpenInfo());
 
         doInTransaction((Session session) -> {
             final Query<Student> studentQuery = session.createQuery(
@@ -195,18 +196,35 @@ public class HibernateApp {
                     student.getEmail()
             ));
         });
-
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllStudentsForCourseIdBySet(final int i) {
+        System.out.println(getOpenInfo());
+
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, i);
+            System.out.println("Students for course: " + course.getName());
+            course.getStudents().forEach(student -> System.out.printf(
+                    "Student name: %s, student email: %s\n",
+                    student.getName(),
+                    student.getEmail()
+            ));
+        });
+
+        System.out.println(getCloseInfo());
     }
 
     private static void createTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
 
+        System.out.println(getCloseInfo());
     }
 
     private static void getAllTeachersForCourse(int id) {
+        System.out.println(getOpenInfo());
 
+        System.out.println(getCloseInfo());
     }
 
     private static void doInTransaction(Consumer<Session> consumer){
