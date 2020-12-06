@@ -7,7 +7,6 @@ import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
 
 public class HibernateConfiguration {
-    private static HibernateConfiguration INSTANCE = new HibernateConfiguration();
 
     private final SessionFactory sessionFactory;
 
@@ -22,9 +21,5 @@ public class HibernateConfiguration {
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
-    }
-
-    public static HibernateConfiguration getInstance() {
-        return INSTANCE;
     }
 }

@@ -3,7 +3,7 @@ package pl.sda.hibernate.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import pl.sda.hibernate.entity.Course;
+import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.NamedEntity;
 
 import java.util.Set;
@@ -13,8 +13,8 @@ import java.util.function.Function;
 public abstract class HibernateBaseDao<T extends NamedEntity> {
     protected final SessionFactory sessionFactory;
 
-    public HibernateBaseDao(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public HibernateBaseDao(HibernateConfiguration hibernateConfiguration) {
+        this.sessionFactory = hibernateConfiguration.getSessionFactory();
     }
 
     public void create(T student) {

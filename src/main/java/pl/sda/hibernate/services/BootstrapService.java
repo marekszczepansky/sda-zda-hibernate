@@ -30,19 +30,16 @@ public class BootstrapService {
         course.setName("course 1");
         course.setStartDate(LocalDate.of(2021, 2, 24));
         courses.add(course);
-        System.out.println("course 1 persisted");
 
         course = new Course();
         course.setName("course 2");
         course.setStartDate(LocalDate.of(2021, 3, 12));
         courses.add(course);
-        System.out.println("course 2 persisted");
 
         course = new Course();
         course.setName("course 3");
         course.setStartDate(LocalDate.of(2021, 1, 6));
         courses.add(course);
-        System.out.println("course 3 persisted");
         courseDao.create(courses);
 
     }
@@ -56,21 +53,18 @@ public class BootstrapService {
         student.setEmail("natalia@sda.pl");
         student.setCourse(course);
         students.add(student);
-        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
 
         student = new Student();
         student.setName("Marek");
         student.setEmail("marek@sda.pl");
         student.setCourse(course);
         students.add(student);
-        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
 
         student = new Student();
         student.setName("Kacper");
         student.setEmail("kacper@sda.pl");
         student.setCourse(course);
         students.add(student);
-        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
 
         studentDao.create(students);
     }
@@ -84,28 +78,24 @@ public class BootstrapService {
         teacher.setSubject("Java podstawy");
         teacher.getCourses().add(course);
         teachers.add(teacher);
-        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
         teacher = new Teacher();
         teacher.setName("Franek");
         teacher.setSubject("Bazy danych");
         teacher.getCourses().add(course);
         teachers.add(teacher);
-        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
         teacher = new Teacher();
         teacher.setName("Artur");
         teacher.setSubject("SQL");
         teacher.getCourses().add(course);
         teachers.add(teacher);
-        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
         teacher = new Teacher();
         teacher.setName("Eryk");
         teacher.setSubject("Spring");
         teacher.getCourses().add(course);
         teachers.add(teacher);
-        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
         teacherDao.create(teachers);
     }
 }

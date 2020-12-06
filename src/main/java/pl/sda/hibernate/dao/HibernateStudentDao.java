@@ -1,15 +1,15 @@
 package pl.sda.hibernate.dao;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.Student;
 
 import java.util.List;
 
 public class HibernateStudentDao extends HibernateBaseDao<Student> implements StudentDao {
 
-    public HibernateStudentDao(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public HibernateStudentDao(HibernateConfiguration hibernateConfiguration) {
+        super(hibernateConfiguration);
     }
 
     @Override

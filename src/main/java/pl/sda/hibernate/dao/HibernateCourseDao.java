@@ -1,14 +1,14 @@
 package pl.sda.hibernate.dao;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.Course;
 
 import java.util.List;
 
 public class HibernateCourseDao extends HibernateBaseDao<Course> implements CourseDao {
-    public HibernateCourseDao(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public HibernateCourseDao(HibernateConfiguration hibernateConfiguration) {
+        super(hibernateConfiguration);
     }
 
     @Override

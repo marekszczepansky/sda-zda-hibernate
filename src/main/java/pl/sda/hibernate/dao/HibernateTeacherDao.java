@@ -1,6 +1,6 @@
 package pl.sda.hibernate.dao;
 
-import org.hibernate.SessionFactory;
+import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Teacher;
 
@@ -9,8 +9,8 @@ import java.util.List;
 
 public class HibernateTeacherDao extends HibernateBaseDao<Teacher> implements TeacherDao {
 
-    public HibernateTeacherDao(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public HibernateTeacherDao(HibernateConfiguration hibernateConfiguration) {
+        super(hibernateConfiguration);
     }
 
     @Override
