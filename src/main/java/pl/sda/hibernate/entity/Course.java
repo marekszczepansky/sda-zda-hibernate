@@ -15,35 +15,14 @@ import java.util.Set;
 
 @Entity
 @Table(name = "course_table")
-public class Course {
+public class Course extends NamedEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(length = 100, unique = true, nullable = false)
-    private String name;
     @Column(nullable = false)
     private LocalDate startDate;
     @OneToMany(mappedBy = "course")
     private final Set<Student> students = new HashSet<>();
     @ManyToMany(mappedBy = "courses")
     private final Set<Teacher> teachers = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public LocalDate getStartDate() {
         return startDate;
@@ -65,15 +44,14 @@ public class Course {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Course course = (Course) o;
-        return id == course.id &&
-                Objects.equals(name, course.name) &&
-                Objects.equals(startDate, course.startDate);
+        return Objects.equals(startDate, course.startDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, startDate);
+        return Objects.hash(super.hashCode(), startDate);
     }
 
     @Override

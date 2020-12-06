@@ -1,9 +1,6 @@
 package pl.sda.hibernate.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -12,33 +9,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-public class Teacher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
+public class Teacher extends NamedEntity {
+
     private String subject;
     @ManyToMany
     @JoinTable(name = "course_teacher",
             joinColumns = @JoinColumn(name = "teacherId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "courseId", referencedColumnName = "id"))
     private final Set<Course> courses = new HashSet<>();
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getSubject() {
         return subject;
@@ -56,15 +34,14 @@ public class Teacher {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
-        return id == teacher.id &&
-                Objects.equals(name, teacher.name) &&
-                Objects.equals(subject, teacher.subject);
+        return Objects.equals(subject, teacher.subject);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, subject);
+        return Objects.hash(super.hashCode(), subject);
     }
 
     @Override
