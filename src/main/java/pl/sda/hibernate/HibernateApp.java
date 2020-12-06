@@ -4,11 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import pl.sda.hibernate.dao.CourseDao;
+import pl.sda.hibernate.dao.HibernateTeacherDao;
 import pl.sda.hibernate.dao.HibernateCourseDao;
 import pl.sda.hibernate.dao.HibernateStudentDao;
 import pl.sda.hibernate.dao.StudentDao;
+import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
@@ -25,6 +26,7 @@ public class HibernateApp {
 
     private static CourseDao courseDao;
     private static StudentDao studentDao;
+    private static TeacherDao teacherDao;
 
     public static void main(String[] args) {
 
@@ -37,6 +39,7 @@ public class HibernateApp {
 
         courseDao = new HibernateCourseDao(sessionFactory);
         studentDao = new HibernateStudentDao(sessionFactory);
+        teacherDao = new HibernateTeacherDao(sessionFactory);
 
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
@@ -158,20 +161,20 @@ public class HibernateApp {
     private static void getAllStudentsForCourseIdByQuery(final int id) {
         System.out.println(getOpenInfo());
 
-            final List<Student> studentList = studentDao.findAllByCourseId(id);
-            System.out.println("List of students for course Id: " + id);
-            System.out.println("Course name: " + studentList
-                    .stream()
-                    .findFirst()
-                    .map(Student::getCourse)
-                    .map(Course::getName)
-                    .orElse("<empty>")
-            );
-            studentList.forEach(student -> System.out.printf(
-                    "Student name: %s, student email: %s\n",
-                    student.getName(),
-                    student.getEmail()
-            ));
+        final List<Student> studentList = studentDao.findAllByCourseId(id);
+        System.out.println("List of students for course Id: " + id);
+        System.out.println("Course name: " + studentList
+                .stream()
+                .findFirst()
+                .map(Student::getCourse)
+                .map(Course::getName)
+                .orElse("<empty>")
+        );
+        studentList.forEach(student -> System.out.printf(
+                "Student name: %s, student email: %s\n",
+                student.getName(),
+                student.getEmail()
+        ));
         System.out.println(getCloseInfo());
     }
 
@@ -193,55 +196,49 @@ public class HibernateApp {
 
     private static void createTeachersForCourse(final int id) {
         System.out.println(getOpenInfo());
-        doInTransaction(session -> {
-            final Course course = session.find(Course.class, id);
+        Set<Teacher> teachers = new HashSet<>();
+        final Course course = courseDao.findById(id);
 
-            Teacher teacher = new Teacher();
-            teacher.setName("Wojtek");
-            teacher.setSubject("Java podstawy");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+        Teacher teacher = new Teacher();
+        teacher.setName("Wojtek");
+        teacher.setSubject("Java podstawy");
+        teacher.getCourses().add(course);
+        teachers.add(teacher);
+        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
-            teacher = new Teacher();
-            teacher.setName("Franek");
-            teacher.setSubject("Bazy danych");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+        teacher = new Teacher();
+        teacher.setName("Franek");
+        teacher.setSubject("Bazy danych");
+        teacher.getCourses().add(course);
+        teachers.add(teacher);
+        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
-            session.flush();  // testowe dodanie flush aby wymusić zapis do bazy
+        teacher = new Teacher();
+        teacher.setName("Artur");
+        teacher.setSubject("SQL");
+        teacher.getCourses().add(course);
+        teachers.add(teacher);
+        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
 
-            teacher = new Teacher();
-            teacher.setName("Artur");
-            teacher.setSubject("SQL");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+        teacher = new Teacher();
+        teacher.setName("Eryk");
+        teacher.setSubject("Spring");
+        teacher.getCourses().add(course);
+        teachers.add(teacher);
+        System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
+        teacherDao.create(teachers);
 
-            teacher = new Teacher();
-            teacher.setName("Eryk");
-            teacher.setSubject("Spring");
-            teacher.getCourses().add(course);
-            session.persist(teacher);
-            System.out.printf("Teacher %s created with course %s\n", teacher.getName(), course.getName());
-        });
         System.out.println(getCloseInfo());
     }
 
     private static void getAllTeachersForCourse(int id) {
         System.out.println(getOpenInfo());
-
-        doInTransaction(session -> {
-            final Course course = session.find(Course.class, id);
-            System.out.println("Teachers for course: " + course.getName());
-            course.getTeachers().forEach(teacher -> System.out.printf(
-                    "Teacher name: %s, teacher subject: %s\n",
-                    teacher.getName(),
-                    teacher.getSubject()
-            ));
-        });
-
+        teacherDao.getAllTeachersForCourseId(id)
+                .forEach(teacher -> System.out.printf(
+                        "Teacher name: %s, teacher subject: %s\n",
+                        teacher.getName(),
+                        teacher.getSubject())
+                );
         System.out.println(getCloseInfo());
     }
 
