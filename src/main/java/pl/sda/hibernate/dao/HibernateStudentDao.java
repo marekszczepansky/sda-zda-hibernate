@@ -1,32 +1,15 @@
 package pl.sda.hibernate.dao;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
-public class HibernateStudentDao implements StudentDao {
-    final private SessionFactory sessionFactory;
+public class HibernateStudentDao extends HibernateBaseDao<Student> implements StudentDao {
 
     public HibernateStudentDao(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    @Override
-    public void create(Student student) {
-        doInTransaction(session -> session.persist(student));
-    }
-
-    @Override
-    public void create(Set<Student> students) {
-        doInTransaction(session -> students.forEach(session::persist));
+        super(sessionFactory);
     }
 
     @Override
@@ -46,37 +29,4 @@ public class HibernateStudentDao implements StudentDao {
         });
     }
 
-    private void doInTransaction(Consumer<Session> consumer) {
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
-
-            consumer.accept(session);
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
-    }
-
-    private <K> K getInTransaction(Function<Session, K> function) {
-        Transaction tx = null;
-        K result;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
-
-            result = function.apply(session);
-
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
-        return result;
-    }
 }
