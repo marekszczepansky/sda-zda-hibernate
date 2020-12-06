@@ -7,6 +7,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.HibernateCourseDao;
+import pl.sda.hibernate.dao.HibernateStudentDao;
+import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Student;
 import pl.sda.hibernate.entity.Teacher;
@@ -22,6 +24,7 @@ public class HibernateApp {
     static SessionFactory sessionFactory;
 
     private static CourseDao courseDao;
+    private static StudentDao studentDao;
 
     public static void main(String[] args) {
 
@@ -33,6 +36,7 @@ public class HibernateApp {
                 .buildSessionFactory();
 
         courseDao = new HibernateCourseDao(sessionFactory);
+        studentDao = new HibernateStudentDao(sessionFactory);
 
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
