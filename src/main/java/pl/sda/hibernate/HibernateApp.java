@@ -256,6 +256,16 @@ public class HibernateApp {
     private static void getAllTeachersForCourse(int id) {
         System.out.println(getOpenInfo());
 
+        doInTransaction(session -> {
+            final Course course = session.find(Course.class, id);
+            System.out.println("Teachers for course: " + course.getName());
+            course.getTeachers().forEach(teacher -> System.out.printf(
+                    "Teacher name: %s, teacher subject: %s\n",
+                    teacher.getName(),
+                    teacher.getSubject()
+            ));
+        });
+
         System.out.println(getCloseInfo());
     }
 

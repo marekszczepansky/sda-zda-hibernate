@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -25,6 +26,8 @@ public class Course {
     private LocalDate startDate;
     @OneToMany(mappedBy = "course")
     private final Set<Student> students = new HashSet<>();
+    @ManyToMany(mappedBy = "courses")
+    private final Set<Teacher> teachers = new HashSet<>();
 
     public int getId() {
         return id;
@@ -52,6 +55,10 @@ public class Course {
 
     public Set<Student> getStudents() {
         return students;
+    }
+
+    public Set<Teacher> getTeachers() {
+        return teachers;
     }
 
     @Override
