@@ -15,49 +15,39 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Context {
-    private static Context INSTANCE = new Context();
     private static Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
+    private static Context INSTANCE = new Context();
 
     private Context() {
+        registerComponents();
+    }
+
+    private void registerComponents() {
+        componentStore.put(Screen.class, new Screen());
+        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration());
+        componentStore.put(CourseDao.class, new HibernateCourseDao(getComponent(HibernateConfiguration.class)));
+        componentStore.put(StudentDao.class, new HibernateStudentDao(getComponent(HibernateConfiguration.class)));
+        componentStore.put(TeacherDao.class, new HibernateTeacherDao(getComponent(HibernateConfiguration.class)));
+        componentStore.put(BootstrapService.class, new BootstrapService(
+                getComponent(CourseDao.class),
+                getComponent(StudentDao.class),
+                getComponent(TeacherDao.class)
+        ));
+        componentStore.put(SearchService.class, new SearchService(
+                getComponent(CourseDao.class),
+                getComponent(StudentDao.class),
+                getComponent(TeacherDao.class),
+                getComponent(Screen.class)
+        ));
     }
 
     public static Context getInstance() {
         return INSTANCE;
     }
 
-    public HibernateConfiguration getHibernateConfiguration() {
-        return (HibernateConfiguration) componentStore
-                .computeIfAbsent(HibernateConfiguration.class, aClass -> new HibernateConfiguration());
-    }
-
-    public CourseDao getCourseDao() {
-        return (CourseDao) componentStore
-                .computeIfAbsent(CourseDao.class, aClass -> new HibernateCourseDao(getHibernateConfiguration()));
-    }
-
-    public StudentDao getStudentDao() {
-        return (StudentDao) componentStore
-                .computeIfAbsent(StudentDao.class, aClass -> new HibernateStudentDao(getHibernateConfiguration()));
-    }
-
-    public TeacherDao getTeacherDao() {
-        return (TeacherDao) componentStore
-                .computeIfAbsent(TeacherDao.class, aClass -> new HibernateTeacherDao(getHibernateConfiguration()));
-    }
-
-    public BootstrapService getBootstrapService() {
-        return (BootstrapService) componentStore
-                .computeIfAbsent(BootstrapService.class, aClass -> new BootstrapService(getCourseDao(), getStudentDao(), getTeacherDao()));
-    }
-
-    public SearchService getSearchService() {
-        return (SearchService) componentStore
-                .computeIfAbsent(SearchService.class, aClass -> new SearchService(getCourseDao(), getStudentDao(), getTeacherDao(), getScreen()));
-    }
-
-    public Screen getScreen() {
-        return (Screen) componentStore
-                .computeIfAbsent(Screen.class, aClass -> new Screen());
+    public <K> K getComponent(Class<K> key) {
+        //noinspection unchecked
+        return (K) componentStore.get(key);
     }
 
 }

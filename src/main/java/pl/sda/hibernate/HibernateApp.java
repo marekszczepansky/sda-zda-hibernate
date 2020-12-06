@@ -13,8 +13,8 @@ public class HibernateApp {
 
         final Context context = Context.getInstance();
 
-        bootstrapService = context.getBootstrapService();
-        searchService = context.getSearchService();
+        bootstrapService = context.getComponent(BootstrapService.class);
+        searchService = context.getComponent(SearchService.class);
 
         System.out.println("\n\n--------------------->\n" +
                 "Hibernate Session Factory Created");
