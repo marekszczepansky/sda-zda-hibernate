@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Student extends NamedEntity {
 
     private String email;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "courseId")
     private Course course;
 

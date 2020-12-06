@@ -126,30 +126,31 @@ public class HibernateApp {
     private static void createStudentsForCourseId(final int id) {
         System.out.println(getOpenInfo());
 
-        doInTransaction(session -> {
-            final Course course = session.find(Course.class, id);
+        Set<Student> students = new HashSet<>();
+        final Course course = courseDao.findById(id);
 
-            Student student = new Student();
-            student.setName("Natalia");
-            student.setEmail("natalia@sda.pl");
-            student.setCourse(course);
-            session.persist(student);
-            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+        Student student = new Student();
+        student.setName("Natalia");
+        student.setEmail("natalia@sda.pl");
+        student.setCourse(course);
+        students.add(student);
+        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
 
-            student = new Student();
-            student.setName("Marek");
-            student.setEmail("marek@sda.pl");
-            student.setCourse(course);
-            session.persist(student);
-            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+        student = new Student();
+        student.setName("Marek");
+        student.setEmail("marek@sda.pl");
+        student.setCourse(course);
+        students.add(student);
+        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
 
-            student = new Student();
-            student.setName("Kacper");
-            student.setEmail("kacper@sda.pl");
-            student.setCourse(course);
-            session.persist(student);
-            System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
-        });
+        student = new Student();
+        student.setName("Kacper");
+        student.setEmail("kacper@sda.pl");
+        student.setCourse(course);
+        students.add(student);
+        System.out.printf("Student %s created for course %s\n", student.getName(), course.getName());
+
+        studentDao.create(students);
 
         System.out.println(getCloseInfo());
     }
@@ -157,12 +158,7 @@ public class HibernateApp {
     private static void getAllStudentsForCourseIdByQuery(final int id) {
         System.out.println(getOpenInfo());
 
-        doInTransaction((Session session) -> {
-            final Query<Student> studentQuery = session.createQuery(
-                    "from Student s where s.course.id = :courseIdParam",
-                    Student.class);
-            studentQuery.setParameter("courseIdParam", id);
-            final List<Student> studentList = studentQuery.getResultList();
+            final List<Student> studentList = studentDao.findAllByCourseId(id);
             System.out.println("List of students for course Id: " + id);
             System.out.println("Course name: " + studentList
                     .stream()
@@ -176,7 +172,6 @@ public class HibernateApp {
                     student.getName(),
                     student.getEmail()
             ));
-        });
         System.out.println(getCloseInfo());
     }
 
