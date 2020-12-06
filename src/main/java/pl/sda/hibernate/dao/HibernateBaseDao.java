@@ -3,6 +3,7 @@ package pl.sda.hibernate.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.NamedEntity;
 
 import java.util.Set;
@@ -22,6 +23,10 @@ public abstract class HibernateBaseDao<T extends NamedEntity> {
 
     public void create(Set<T> students) {
         doInTransaction(session -> students.forEach(session::persist));
+    }
+
+    public T findById(final Class<T> entityClass, final int id) {
+        return getInTransaction(session -> session.find(entityClass, id));
     }
 
     protected void doInTransaction(Consumer<Session> consumer) {

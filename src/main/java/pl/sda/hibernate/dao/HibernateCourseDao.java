@@ -13,7 +13,7 @@ public class HibernateCourseDao extends HibernateBaseDao<Course> implements Cour
 
     @Override
     public Course findById(final int id) {
-        return getInTransaction(session -> session.find(Course.class, id));
+        return findById(Course.class, id);
     }
 
     @Override

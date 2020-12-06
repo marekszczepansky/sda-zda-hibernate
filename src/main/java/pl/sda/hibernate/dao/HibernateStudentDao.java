@@ -14,7 +14,7 @@ public class HibernateStudentDao extends HibernateBaseDao<Student> implements St
 
     @Override
     public Student findById(int id) {
-        return getInTransaction(session -> session.find(Student.class, id));
+        return findById(Student.class, id);
     }
 
     @Override
