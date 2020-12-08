@@ -1,5 +1,6 @@
 package pl.sda.hibernate.services;
 
+import org.springframework.stereotype.Service;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.dao.TeacherDao;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+@Service
 public class BootstrapService {
     public static final int COURSE_ID = 1;
     private final CourseDao courseDao;

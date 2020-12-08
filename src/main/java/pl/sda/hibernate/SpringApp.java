@@ -13,7 +13,6 @@ import javax.persistence.EntityManagerFactory;
 public class SpringApp {
     public static void main(String[] args) {
         final ConfigurableApplicationContext applicationContext = SpringApplication.run(SpringApp.class, args);
-        HibernateConfiguration.sessionFactory =  applicationContext.getBean(EntityManagerFactory.class).unwrap(SessionFactory.class);
-        HibernateApp.mainOld();
+        HibernateApp.mainOld(applicationContext);
     }
 }

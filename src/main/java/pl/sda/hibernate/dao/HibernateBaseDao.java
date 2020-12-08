@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.entity.NamedEntity;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -61,5 +62,9 @@ public abstract class HibernateBaseDao<T extends NamedEntity> {
             throw ex;
         }
         return result;
+    }
+
+    protected List<T> getAll(final Class<T> entityClass) {
+        return getInTransaction(session -> session.createQuery("from " + entityClass.getSimpleName(), entityClass).list());
     }
 }

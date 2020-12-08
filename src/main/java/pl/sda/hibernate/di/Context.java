@@ -24,7 +24,7 @@ public class Context {
 
     private void registerComponents() {
         componentStore.put(Screen.class, new Screen());
-        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration());
+//        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration());
         componentStore.put(CourseDao.class, new HibernateCourseDao(getComponent(HibernateConfiguration.class)));
         componentStore.put(StudentDao.class, new HibernateStudentDao(getComponent(HibernateConfiguration.class)));
         componentStore.put(TeacherDao.class, new HibernateTeacherDao(getComponent(HibernateConfiguration.class)));

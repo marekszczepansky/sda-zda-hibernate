@@ -2,6 +2,7 @@ package pl.sda.hibernate.dao;
 
 import pl.sda.hibernate.entity.Course;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,5 +35,10 @@ public class MemoryCourseDao implements CourseDao {
     @Override
     public Course findById(int id) {
         return courseMap.get(id);
+    }
+
+    @Override
+    public List<Course> getAll() {
+        return new ArrayList<>(courseMap.values());
     }
 }

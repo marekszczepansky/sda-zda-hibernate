@@ -1,5 +1,6 @@
 package pl.sda.hibernate.services;
 
+import org.springframework.stereotype.Service;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.dao.TeacherDao;
@@ -8,6 +9,7 @@ import pl.sda.hibernate.entity.Student;
 
 import java.util.List;
 
+@Service
 public class SearchService {
     private final CourseDao courseDao;
     private final StudentDao studentDao;

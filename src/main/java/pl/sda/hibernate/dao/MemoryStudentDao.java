@@ -2,6 +2,7 @@ package pl.sda.hibernate.dao;
 
 import pl.sda.hibernate.entity.Student;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,5 +38,10 @@ public class MemoryStudentDao implements StudentDao {
     @Override
     public Student findById(int id) {
         return studentMap.get(id);
+    }
+
+    @Override
+    public List<Student> getAll() {
+        return new ArrayList<>(studentMap.values());
     }
 }
