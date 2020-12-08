@@ -1,6 +1,7 @@
 package pl.sda.hibernate;
 
 import pl.sda.hibernate.di.Context;
+import pl.sda.hibernate.di.ContextMemory;
 import pl.sda.hibernate.services.BootstrapService;
 import pl.sda.hibernate.services.SearchService;
 
@@ -11,7 +12,7 @@ public class HibernateApp {
 
     public static void main(String[] args) {
 
-        final Context context = Context.getInstance();
+        final ContextMemory context = ContextMemory.getInstance();
 
         bootstrapService = context.getComponent(BootstrapService.class);
         searchService = context.getComponent(SearchService.class);
