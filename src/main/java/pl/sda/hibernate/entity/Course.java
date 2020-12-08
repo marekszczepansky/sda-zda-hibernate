@@ -1,7 +1,10 @@
 package pl.sda.hibernate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,9 +19,11 @@ public class Course extends NamedEntity {
 
     @Column(nullable = false)
     private LocalDate startDate;
+    @JsonIgnore
     @OneToMany(mappedBy = "course")
     private final Set<Student> students = new HashSet<>();
     @ManyToMany(mappedBy = "courses")
+    @JsonIgnore
     private final Set<Teacher> teachers = new HashSet<>();
 
     public LocalDate getStartDate() {

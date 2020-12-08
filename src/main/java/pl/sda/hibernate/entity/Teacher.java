@@ -1,5 +1,7 @@
 package pl.sda.hibernate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -12,6 +14,7 @@ import java.util.Set;
 public class Teacher extends NamedEntity {
 
     private String subject;
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "course_teacher",
             joinColumns = @JoinColumn(name = "teacherId", referencedColumnName = "id"),
