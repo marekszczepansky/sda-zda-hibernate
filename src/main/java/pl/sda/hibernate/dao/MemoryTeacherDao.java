@@ -1,6 +1,7 @@
 package pl.sda.hibernate.dao;
 
-import pl.sda.hibernate.entity.Student;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import pl.sda.hibernate.entity.Teacher;
 
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Component
+@ConditionalOnProperty(value = "dao.hibernate", havingValue = "false")
 public class MemoryTeacherDao implements TeacherDao {
     private final Map<Integer, Teacher> teacherMap = new HashMap<>();
     private AtomicInteger maxId = new AtomicInteger(1);

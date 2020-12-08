@@ -14,6 +14,10 @@ import pl.sda.hibernate.services.SearchService;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Context for no Spring dependency injection implementation
+ * not used any more
+ */
 public class Context {
     private static Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
     private static Context INSTANCE = new Context();

@@ -1,11 +1,7 @@
 package pl.sda.hibernate.configuration;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.springframework.stereotype.Component;
-import pl.sda.hibernate.entity.Course;
-import pl.sda.hibernate.entity.Student;
-import pl.sda.hibernate.entity.Teacher;
 
 import javax.persistence.EntityManagerFactory;
 

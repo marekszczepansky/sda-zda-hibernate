@@ -13,6 +13,11 @@ import pl.sda.hibernate.services.SearchService;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Context for no Spring dependency injection implementation
+ * used for Memory DAO implementation
+ * not used any more
+ */
 public class ContextMemory {
     private static final Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
     private static final ContextMemory INSTANCE = new ContextMemory();

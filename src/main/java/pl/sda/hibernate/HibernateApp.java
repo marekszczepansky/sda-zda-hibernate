@@ -1,7 +1,6 @@
 package pl.sda.hibernate;
 
 import org.springframework.context.ConfigurableApplicationContext;
-import pl.sda.hibernate.di.Context;
 import pl.sda.hibernate.services.BootstrapService;
 import pl.sda.hibernate.services.SearchService;
 
@@ -15,9 +14,6 @@ public class HibernateApp {
 
         bootstrapService = applicationContext.getBean(BootstrapService.class);
         searchService = applicationContext.getBean(SearchService.class);
-
-        System.out.println("\n\n--------------------->\n" +
-                "Hibernate Session Factory Created");
 
         bootstrapService.createCourses();
         bootstrapService.createStudents();
