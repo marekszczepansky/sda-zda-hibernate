@@ -8,15 +8,15 @@ import pl.sda.hibernate.entity.Teacher;
 
 public class HibernateConfiguration {
 
-    private final SessionFactory sessionFactory;
+    public static SessionFactory sessionFactory;
 
     public HibernateConfiguration() {
-        sessionFactory = new Configuration()
-                .configure("hibernate.cfg.xml")
-                .addAnnotatedClass(Course.class)
-                .addAnnotatedClass(Student.class)
-                .addAnnotatedClass(Teacher.class)
-                .buildSessionFactory();
+//        sessionFactory = new Configuration()
+//                .configure("hibernate.cfg.xml")
+//                .addAnnotatedClass(Course.class)
+//                .addAnnotatedClass(Student.class)
+//                .addAnnotatedClass(Teacher.class)
+//                .buildSessionFactory();
     }
 
     public SessionFactory getSessionFactory() {
