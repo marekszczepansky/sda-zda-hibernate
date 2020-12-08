@@ -10,7 +10,7 @@ public class HibernateApp {
     private static BootstrapService bootstrapService;
     private static SearchService searchService;
 
-    public static void main(String[] args) {
+    public static void mainOld() {
 
         final ContextMemory context = ContextMemory.getInstance();
 
