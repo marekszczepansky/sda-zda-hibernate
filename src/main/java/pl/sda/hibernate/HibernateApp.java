@@ -1,5 +1,6 @@
 package pl.sda.hibernate;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import pl.sda.hibernate.di.Context;
 import pl.sda.hibernate.di.ContextMemory;
 import pl.sda.hibernate.services.BootstrapService;
@@ -10,9 +11,10 @@ public class HibernateApp {
     private static BootstrapService bootstrapService;
     private static SearchService searchService;
 
-    public static void main(String[] args) {
+    public static void mainOld(ConfigurableApplicationContext applicationContext) {
 
-        final ContextMemory context = ContextMemory.getInstance();
+//        final ContextMemory context = ContextMemory.getInstance();
+        final Context context = Context.getInstance(applicationContext);
 
         bootstrapService = context.getComponent(BootstrapService.class);
         searchService = context.getComponent(SearchService.class);

@@ -1,5 +1,6 @@
 package pl.sda.hibernate.di;
 
+import org.springframework.context.ConfigurableApplicationContext;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.dao.HibernateCourseDao;
@@ -15,16 +16,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Context {
-    private static Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
-    private static Context INSTANCE = new Context();
+    private static final Map<Class<?>, Object> componentStore = new ConcurrentHashMap<>();
+    private static final Context INSTANCE = new Context();
 
     private Context() {
-        registerComponents();
     }
 
-    private void registerComponents() {
+    private void registerComponents(ConfigurableApplicationContext applicationContext) {
         componentStore.put(Screen.class, new Screen());
-        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration());
+        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration(applicationContext));
         componentStore.put(CourseDao.class, new HibernateCourseDao(getComponent(HibernateConfiguration.class)));
         componentStore.put(StudentDao.class, new HibernateStudentDao(getComponent(HibernateConfiguration.class)));
         componentStore.put(TeacherDao.class, new HibernateTeacherDao(getComponent(HibernateConfiguration.class)));
@@ -41,7 +41,8 @@ public class Context {
         ));
     }
 
-    public static Context getInstance() {
+    public static Context getInstance(ConfigurableApplicationContext applicationContext) {
+        if (componentStore.size() == 0) INSTANCE.registerComponents(applicationContext);
         return INSTANCE;
     }
 
