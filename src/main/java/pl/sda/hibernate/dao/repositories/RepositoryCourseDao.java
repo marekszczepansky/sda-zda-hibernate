@@ -3,6 +3,7 @@ package pl.sda.hibernate.dao.repositories;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import pl.sda.hibernate.aop.LogEntry;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.repositories.CourseRepository;
@@ -25,34 +26,34 @@ public class RepositoryCourseDao implements CourseDao {
     }
 
     @Override
+    @LogEntry
     public List<Course> findByNameLike(String nameTerm) {
-        screen.println("findByNameLike from repository");
         return courseRepository.findByNameLike(nameTerm);
     }
 
     @Override
     @Transactional
+    @LogEntry
     public void create(Course entity) {
-        screen.println("create from repository");
         courseRepository.save(entity);
     }
 
     @Override
     @Transactional
+    @LogEntry
     public void create(Set<Course> entities) {
-        screen.println("create from Set from repository");
         courseRepository.saveAll(entities);
     }
 
     @Override
+    @LogEntry
     public Course findById(int id) {
-        screen.println("findById from repository");
         return courseRepository.findById(id).orElse(null);
     }
 
     @Override
+    @LogEntry
     public List<Course> getAll() {
-        screen.println("getAll from repository");
         return courseRepository.findAll();
     }
 }
