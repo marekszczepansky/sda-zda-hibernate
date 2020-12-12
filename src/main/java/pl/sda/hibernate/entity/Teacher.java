@@ -21,6 +21,15 @@ public class Teacher extends NamedEntity {
             inverseJoinColumns = @JoinColumn(name = "courseId", referencedColumnName = "id"))
     private final Set<Course> courses = new HashSet<>();
 
+    public Teacher(int teacherId, String teacherName, String subject) {
+        this.id = teacherId;
+        this.name = teacherName;
+        this.subject = subject;
+    }
+
+    public Teacher() {
+    }
+
     public String getSubject() {
         return subject;
     }

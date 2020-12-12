@@ -2,12 +2,10 @@ package pl.sda.hibernate.dao.jdbc;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import pl.sda.hibernate.configuration.JDBCConfiguration;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.services.Screen;
 
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
