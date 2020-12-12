@@ -1,17 +1,17 @@
 package pl.sda.hibernate.proxy;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.sda.hibernate.services.Screen;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 @Configuration
 public class ProxyConfiguration {
 
     @Bean
+    @ConditionalOnProperty(value = "screen.implementation", havingValue = "proxy")
     Screen createScreenProxy(){
         final Object baseObject = new Object();
         return (Screen) Proxy.newProxyInstance(

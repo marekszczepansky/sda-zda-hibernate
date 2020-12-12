@@ -10,17 +10,17 @@ import pl.sda.hibernate.repositories.CourseRepository;
 import pl.sda.hibernate.services.Screen;
 
 import java.util.List;
-import java.util.Set;
 
 @Transactional(readOnly = true)
 @Component
 @ConditionalOnProperty(value = "dao.implementation", havingValue = "repository")
-public class RepositoryCourseDao implements CourseDao {
+public class RepositoryCourseDao extends RepositoryBaseDao<Course> implements CourseDao {
 
-    private final CourseRepository courseRepository;
     private final Screen screen;
+    private final CourseRepository courseRepository;
 
     public RepositoryCourseDao(CourseRepository courseRepository, Screen screen) {
+        super(courseRepository);
         this.courseRepository = courseRepository;
         this.screen = screen;
     }
@@ -31,29 +31,4 @@ public class RepositoryCourseDao implements CourseDao {
         return courseRepository.findByNameLike(nameTerm);
     }
 
-    @Override
-    @Transactional
-    @LogEntry
-    public void create(Course entity) {
-        courseRepository.save(entity);
-    }
-
-    @Override
-    @Transactional
-    @LogEntry
-    public void create(Set<Course> entities) {
-        courseRepository.saveAll(entities);
-    }
-
-    @Override
-    @LogEntry
-    public Course findById(int id) {
-        return courseRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    @LogEntry
-    public List<Course> getAll() {
-        return courseRepository.findAll();
-    }
 }
