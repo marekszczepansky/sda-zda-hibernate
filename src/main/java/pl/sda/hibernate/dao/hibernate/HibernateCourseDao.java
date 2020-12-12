@@ -9,8 +9,8 @@ import pl.sda.hibernate.entity.Course;
 
 import java.util.List;
 
-@Component
-@ConditionalOnProperty(value = "dao.implementation", havingValue = "hibernate", matchIfMissing = true)
+//@Component
+//@ConditionalOnProperty(value = "dao.implementation", havingValue = "hibernate", matchIfMissing = true)
 public class HibernateCourseDao extends HibernateBaseDao<Course> implements CourseDao {
 
     public HibernateCourseDao(HibernateConfiguration hibernateConfiguration) {

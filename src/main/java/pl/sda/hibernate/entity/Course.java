@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -25,6 +25,15 @@ public class Course extends NamedEntity {
     @ManyToMany(mappedBy = "courses")
     @JsonIgnore
     private final Set<Teacher> teachers = new HashSet<>();
+
+    public Course() {
+    }
+
+    public Course(int courseId, String courseName, Date courseStartDate) {
+        this.id = courseId;
+        this.name = courseName;
+        this.startDate = courseStartDate.toLocalDate();
+    }
 
     public LocalDate getStartDate() {
         return startDate;
