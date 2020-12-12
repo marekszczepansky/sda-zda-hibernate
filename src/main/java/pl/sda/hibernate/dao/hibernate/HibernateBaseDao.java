@@ -1,4 +1,4 @@
-package pl.sda.hibernate.dao;
+package pl.sda.hibernate.dao.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

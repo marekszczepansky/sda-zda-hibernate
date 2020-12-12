@@ -1,9 +1,9 @@
 package pl.sda.hibernate.di;
 
 import pl.sda.hibernate.dao.CourseDao;
-import pl.sda.hibernate.dao.MemoryCourseDao;
-import pl.sda.hibernate.dao.MemoryStudentDao;
-import pl.sda.hibernate.dao.MemoryTeacherDao;
+import pl.sda.hibernate.dao.memory.MemoryCourseDao;
+import pl.sda.hibernate.dao.memory.MemoryStudentDao;
+import pl.sda.hibernate.dao.memory.MemoryTeacherDao;
 import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.services.BootstrapService;

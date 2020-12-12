@@ -1,8 +1,9 @@
-package pl.sda.hibernate.dao;
+package pl.sda.hibernate.dao.hibernate;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import pl.sda.hibernate.configuration.HibernateConfiguration;
+import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Teacher;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@ConditionalOnProperty(value = "dao.hibernate", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = "dao.implementation", havingValue = "hibernate", matchIfMissing = true)
 public class HibernateTeacherDao extends HibernateBaseDao<Teacher> implements TeacherDao {
 
     public HibernateTeacherDao(HibernateConfiguration hibernateConfiguration) {
