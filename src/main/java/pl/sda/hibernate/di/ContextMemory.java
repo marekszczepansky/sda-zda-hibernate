@@ -7,8 +7,8 @@ import pl.sda.hibernate.dao.memory.MemoryTeacherDao;
 import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.services.BootstrapService;
-import pl.sda.hibernate.services.Screen;
 import pl.sda.hibernate.services.SearchService;
+import pl.sda.hibernate.services.SystemOutScreen;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +27,7 @@ public class ContextMemory {
     }
 
     private void registerComponents() {
-        componentStore.put(Screen.class, new Screen());
+        componentStore.put(SystemOutScreen.class, new SystemOutScreen());
         componentStore.put(CourseDao.class, new MemoryCourseDao());
         componentStore.put(StudentDao.class, new MemoryStudentDao());
         componentStore.put(TeacherDao.class, new MemoryTeacherDao());
@@ -40,7 +40,7 @@ public class ContextMemory {
                 getComponent(CourseDao.class),
                 getComponent(StudentDao.class),
                 getComponent(TeacherDao.class),
-                getComponent(Screen.class)
+                getComponent(SystemOutScreen.class)
         ));
     }
 

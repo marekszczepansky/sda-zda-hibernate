@@ -8,8 +8,8 @@ import pl.sda.hibernate.dao.hibernate.HibernateTeacherDao;
 import pl.sda.hibernate.dao.StudentDao;
 import pl.sda.hibernate.dao.TeacherDao;
 import pl.sda.hibernate.services.BootstrapService;
-import pl.sda.hibernate.services.Screen;
 import pl.sda.hibernate.services.SearchService;
+import pl.sda.hibernate.services.SystemOutScreen;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +27,7 @@ public class Context {
     }
 
     private void registerComponents() {
-        componentStore.put(Screen.class, new Screen());
+        componentStore.put(SystemOutScreen.class, new SystemOutScreen());
 //        componentStore.put(HibernateConfiguration.class, new HibernateConfiguration());
         componentStore.put(CourseDao.class, new HibernateCourseDao(getComponent(HibernateConfiguration.class)));
         componentStore.put(StudentDao.class, new HibernateStudentDao(getComponent(HibernateConfiguration.class)));
@@ -41,7 +41,7 @@ public class Context {
                 getComponent(CourseDao.class),
                 getComponent(StudentDao.class),
                 getComponent(TeacherDao.class),
-                getComponent(Screen.class)
+                getComponent(SystemOutScreen.class)
         ));
     }
 

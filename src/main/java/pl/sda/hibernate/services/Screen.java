@@ -1,14 +1,7 @@
 package pl.sda.hibernate.services;
 
-import org.springframework.stereotype.Service;
+public interface Screen {
+    void printf(String format, Object... args);
 
-@Service
-public class Screen {
-    public void printf(String format, Object ... args) {
-        System.out.printf(format, args);
-    }
-
-    public void println(String text) {
-        System.out.println(text);
-    }
+    void println(String text);
 }
