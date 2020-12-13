@@ -6,6 +6,7 @@ import pl.sda.hibernate.services.Screen;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,18 +52,24 @@ public class AuctionHouseService {
     }
 
     public List<Integer> getAllRoomPrices() {
-        // TODO: implement
-        return Collections.EMPTY_LIST;
+        return rooms.stream()
+                .map(Room::getPrice)
+                .collect(Collectors.toList());
     }
 
     public List<Room> getRoomsClosestCentre(Integer count) {
-        // TODO: implement
-        return Collections.EMPTY_LIST;
+        return rooms.stream()
+                .sorted(Comparator.comparing(Room::getDistance))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
     public List<Room> getRoomsClosestCentreOfCity(Integer count, String city) {
-        // TODO: implement
-        return Collections.EMPTY_LIST;
+        return rooms.stream()
+                .filter((Room room) -> city.equals(room.getCity()))
+                .sorted(Comparator.comparing(Room::getDistance))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
     public List<Room> getAll() {
