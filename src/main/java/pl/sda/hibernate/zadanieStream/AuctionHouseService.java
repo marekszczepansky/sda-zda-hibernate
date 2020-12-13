@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class AuctionHouseService {
@@ -33,8 +35,12 @@ public class AuctionHouseService {
     }
 
     public List<Room> getRoomsFromCity(String city){
-        // TODO: implement
-        return Collections.EMPTY_LIST;
+        if (city == null) {
+            return getAll();
+        }
+        return rooms.stream()
+                .filter((Room room) -> city.equals(room.getCity()))
+                .collect(Collectors.toList());
     }
 
     public List<Room> getRoomsOfSizeBetween(Integer min, Integer max) {
