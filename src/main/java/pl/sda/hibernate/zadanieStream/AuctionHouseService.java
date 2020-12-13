@@ -23,7 +23,7 @@ public class AuctionHouseService {
 
 
     @PostConstruct
-    public void initialise(){
+    public void initialise() {
         rooms.add(new Room("Poznań", 16, 800, 800));
         rooms.add(new Room("Gdańsk", 15, 850, 1500));
         rooms.add(new Room("Poznań", 13, 800, 2500));
@@ -34,7 +34,7 @@ public class AuctionHouseService {
         screen.println("AuctionHouseService initialised");
     }
 
-    public List<Room> getRoomsFromCity(String city){
+    public List<Room> getRoomsFromCity(final String city) {
         if (city == null) {
             return getAll();
         }
@@ -43,9 +43,11 @@ public class AuctionHouseService {
                 .collect(Collectors.toList());
     }
 
-    public List<Room> getRoomsOfSizeBetween(Integer min, Integer max) {
-        // TODO: implement
-        return Collections.EMPTY_LIST;
+    public List<Room> getRoomsOfSizeBetween(final Integer min, final Integer max) {
+        return rooms.stream()
+                .filter(room -> room.getSize() >= (min == null ? 0 : min))
+                .filter(room -> room.getSize() <= (max == null ? Integer.MAX_VALUE : max))
+                .collect(Collectors.toList());
     }
 
     public List<Integer> getAllRoomPrices() {

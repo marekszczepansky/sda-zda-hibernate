@@ -17,33 +17,33 @@ public class AuctionHouseController {
     }
 
     @GetMapping
-    public List<Room> getAll(){
+    public List<Room> getAll() {
         return auctionHouseService.getAll();
     }
 
     @GetMapping("city/{name}")
-    public List<Room> getRoomsFromCity(@PathVariable String name){
+    public List<Room> getRoomsFromCity(@PathVariable String name) {
         return auctionHouseService.getRoomsFromCity(name);
     }
 
     @GetMapping("size/{min}/{max}")
-    public List<Room> getRoomsOfSizeBetween(@PathVariable Integer min, @PathVariable Integer max){
+    public List<Room> getRoomsOfSizeBetween(@PathVariable Integer min, @PathVariable Integer max) {
         return auctionHouseService.getRoomsOfSizeBetween(min, max);
     }
 
     @GetMapping("prices")
-    public List<Integer> getAllRoomPrices(){
+    public List<Integer> getAllRoomPrices() {
         return auctionHouseService.getAllRoomPrices();
     }
 
     @GetMapping("closest/{count}")
-    public List<Room> getRoomsClosestCentre(@PathVariable Integer count){
+    public List<Room> getRoomsClosestCentre(@PathVariable Integer count) {
         return auctionHouseService.getRoomsClosestCentre(count);
     }
 
     @GetMapping("closest/{city}/{count}")
     public List<Room> getRoomsClosestCentreOfCity(@PathVariable Integer count,
-                                                  @PathVariable String city){
+                                                  @PathVariable String city) {
         return auctionHouseService.getRoomsClosestCentreOfCity(count, city);
     }
 }
