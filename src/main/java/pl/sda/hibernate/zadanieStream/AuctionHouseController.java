@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("auctions")
@@ -21,6 +23,11 @@ public class AuctionHouseController {
         return auctionHouseService.getAll();
     }
 
+    @GetMapping("group/city")
+    public Map<String, List<Room>> getAllByCity() {
+        return auctionHouseService.getAllByCity();
+    }
+
     @GetMapping("city/{name}")
     public List<Room> getRoomsFromCity(@PathVariable String name) {
         return auctionHouseService.getRoomsFromCity(name);
@@ -34,6 +41,16 @@ public class AuctionHouseController {
     @GetMapping("prices")
     public List<Integer> getAllRoomPrices() {
         return auctionHouseService.getAllRoomPrices();
+    }
+
+    @GetMapping("windowSides")
+    public List<Set<String>> getWindowSides() {
+        return auctionHouseService.getWindowSides();
+    }
+
+    @GetMapping("windowSidesList")
+    public List<String> getWindowSidesList() {
+        return auctionHouseService.getWindowSidesList();
     }
 
     @GetMapping("closest/{count}")

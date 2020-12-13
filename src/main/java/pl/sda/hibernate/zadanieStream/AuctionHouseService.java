@@ -5,18 +5,17 @@ import pl.sda.hibernate.services.Screen;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 public class AuctionHouseService {
     private final Screen screen;
-    private Set<Room> rooms = new HashSet<>();
+    Set<Room> rooms = new HashSet<>();
 
     public AuctionHouseService(Screen screen) {
         this.screen = screen;
@@ -25,13 +24,13 @@ public class AuctionHouseService {
 
     @PostConstruct
     public void initialise() {
-        rooms.add(new Room("Poznań", 16, 800, 800));
-        rooms.add(new Room("Gdańsk", 15, 850, 1500));
-        rooms.add(new Room("Poznań", 13, 800, 2500));
-        rooms.add(new Room("Gdańsk", 26, 950, 900));
+        rooms.add(new Room("Poznań", 16, 800, 800, "Warta"));
+        rooms.add(new Room("Gdańsk", 15, 850, 1500, "Morze", "Plac zabaw"));
+        rooms.add(new Room("Poznań", 13, 800, 2500, "Ulica", "Droga"));
+        rooms.add(new Room("Gdańsk", 26, 950, 900,  "Wisła", "Kanał"));
         rooms.add(new Room("Poznań", 23, 700, 4500));
-        rooms.add(new Room("Warszawa", 14, 888, 100));
-        rooms.add(new Room("Poznań", 27, 1500, 300));
+        rooms.add(new Room("Warszawa", 14, 888, 100, "Stadion", "Stacja metra"));
+        rooms.add(new Room("Poznań", 27, 1500, 300, "Śmietnik", "Podwórze"));
         screen.println("AuctionHouseService initialised");
     }
 
@@ -74,6 +73,23 @@ public class AuctionHouseService {
 
     public List<Room> getAll() {
         return new ArrayList<>(rooms);
+    }
+
+    public Map<String, List<Room>> getAllByCity() {
+        return rooms.stream()
+                .collect(Collectors.groupingBy(Room::getCity));
+    }
+
+    public List<Set<String>> getWindowSides() {
+        return rooms.stream()
+                .map(Room::getWindowSides)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getWindowSidesList() {
+        return rooms.stream()
+                .flatMap(room -> room.getWindowSides().stream())
+                .collect(Collectors.toList());
     }
 
 }

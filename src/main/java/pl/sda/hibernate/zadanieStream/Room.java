@@ -1,18 +1,27 @@
 package pl.sda.hibernate.zadanieStream;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class Room {
     private String city;
     private Integer size;
     private Integer price;
     private Integer distance;
+    private Set<String> windowSides = new HashSet<>();
 
     public Room(String city, Integer size, Integer price, Integer distance) {
         this.city = city;
         this.size = size;
         this.price = price;
         this.distance = distance;
+    }
+
+    public Room(String city, Integer size, Integer price, Integer distance, String... windowSides) {
+        this(city, size, price, distance);
+        this.windowSides.addAll(Arrays.asList(windowSides.clone()));
     }
 
     public String getCity() {
@@ -45,6 +54,10 @@ public class Room {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public Set<String> getWindowSides() {
+        return windowSides;
     }
 
     @Override
