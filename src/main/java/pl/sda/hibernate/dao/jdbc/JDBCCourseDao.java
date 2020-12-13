@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import pl.sda.hibernate.dao.CourseDao;
 import pl.sda.hibernate.entity.Course;
+import pl.sda.hibernate.zadanieStream.VisibleForTest;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -19,9 +20,12 @@ import java.util.Set;
 @ConditionalOnProperty(value = "dao.implementation", havingValue = "jdbc")
 public class JDBCCourseDao implements CourseDao {
 
-    private static final String ID_FIELD = "id";
-    private static final String NAME_FIELD = "name";
-    private static final String START_DATE_FIELD = "start_date";
+    @VisibleForTest
+    static final String ID_FIELD = "id";
+    @VisibleForTest
+    static final String NAME_FIELD = "name";
+    @VisibleForTest
+    static final String START_DATE_FIELD = "start_date";
     private final JDBCTransactionManager jdbcTransactionManager;
 
     public JDBCCourseDao(JDBCTransactionManager jdbcTransactionManager) {
