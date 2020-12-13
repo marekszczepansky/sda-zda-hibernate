@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.sda.hibernate.services.Screen;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,10 @@ public class AuctionHouseService {
     public List<Room> getRoomsClosestCentreOfCity(Integer count, String city) {
         // TODO: implement
         return Collections.EMPTY_LIST;
+    }
+
+    public List<Room> getAll() {
+        return new ArrayList<>(rooms);
     }
 
 }
