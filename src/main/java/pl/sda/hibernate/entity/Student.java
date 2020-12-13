@@ -16,6 +16,15 @@ public class Student extends NamedEntity {
     @JoinColumn(name = "courseId")
     private Course course;
 
+    public Student(int studentId, String studentName, String email) {
+        id = studentId;
+        name = studentName;
+        this.email = email;
+    }
+
+    public Student() {
+    }
+
     public String getEmail() {
         return email;
     }

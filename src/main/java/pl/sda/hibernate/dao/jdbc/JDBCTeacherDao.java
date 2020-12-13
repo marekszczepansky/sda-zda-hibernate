@@ -2,10 +2,7 @@ package pl.sda.hibernate.dao.jdbc;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import pl.sda.hibernate.configuration.HibernateConfiguration;
-import pl.sda.hibernate.configuration.JDBCConfiguration;
 import pl.sda.hibernate.dao.TeacherDao;
-import pl.sda.hibernate.dao.hibernate.HibernateTeacherDao;
 import pl.sda.hibernate.entity.Course;
 import pl.sda.hibernate.entity.Teacher;
 
@@ -21,18 +18,13 @@ import java.util.Set;
 @ConditionalOnProperty(value = "dao.implementation", havingValue = "jdbc")
 public class JDBCTeacherDao implements TeacherDao {
 
+    private static final String ID_FIELD = "id";
+    private static final String NAME_FIELD = "name";
+    private static final String SUBJECT_FIELD = "subject";
     private final JDBCTransactionManager jdbcTransactionManager;
-    private final JDBCConfiguration jdbcConfiguration;
-    private final HibernateConfiguration hibernateConfiguration;
-    private final HibernateTeacherDao hibernateTeacherDao;
 
-    public JDBCTeacherDao(JDBCTransactionManager jdbcTransactionManager,
-                          JDBCConfiguration jdbcConfiguration,
-                          HibernateConfiguration hibernateConfiguration) {
+    public JDBCTeacherDao(JDBCTransactionManager jdbcTransactionManager) {
         this.jdbcTransactionManager = jdbcTransactionManager;
-        this.jdbcConfiguration = jdbcConfiguration;
-        this.hibernateConfiguration = hibernateConfiguration;
-        this.hibernateTeacherDao = new HibernateTeacherDao(hibernateConfiguration);
     }
 
     @Override
@@ -42,14 +34,11 @@ public class JDBCTeacherDao implements TeacherDao {
             try {
 
                 final PreparedStatement preparedStatement = connection.prepareStatement(
-                        "select teacher1_.* " +
-                                "    from " +
-                                "        course_teacher teachers0_ " +
-                                "    inner join " +
-                                "        teacher teacher1_ " +
-                                "            on teachers0_.teacher_id=teacher1_.id " +
-                                "    where " +
-                                "        teachers0_.course_id=?"
+                        "select t.* " +
+                                "from course_teacher ct " +
+                                "inner join teacher t " +
+                                "on ct.teacher_id=t.id " +
+                                "where ct.course_id=?"
                 );
 
                 preparedStatement.setInt(1, id);
@@ -57,9 +46,9 @@ public class JDBCTeacherDao implements TeacherDao {
                 final ResultSet resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
-                    final int teacherId = resultSet.getInt("id");
-                    final String teacherName = resultSet.getString("name");
-                    final String subject = resultSet.getString("subject");
+                    final int teacherId = resultSet.getInt(ID_FIELD);
+                    final String teacherName = resultSet.getString(NAME_FIELD);
+                    final String subject = resultSet.getString(SUBJECT_FIELD);
                     teachers.add(new Teacher(teacherId, teacherName, subject));
                 }
                 return teachers;
@@ -154,9 +143,9 @@ public class JDBCTeacherDao implements TeacherDao {
                 final ResultSet resultSet = preparedStatement.executeQuery();
 
                 if (resultSet.next()) {
-                    final int teacherId = resultSet.getInt("id");
-                    final String teacherName = resultSet.getString("name");
-                    final String subject = resultSet.getString("subject");
+                    final int teacherId = resultSet.getInt(ID_FIELD);
+                    final String teacherName = resultSet.getString(NAME_FIELD);
+                    final String subject = resultSet.getString(SUBJECT_FIELD);
                     return new Teacher(teacherId, teacherName, subject);
                 }
                 return null;
@@ -176,9 +165,9 @@ public class JDBCTeacherDao implements TeacherDao {
                 final ResultSet resultSet = statement.executeQuery("select * from teacher");
 
                 while (resultSet.next()) {
-                    final int teacherId = resultSet.getInt("id");
-                    final String teacherName = resultSet.getString("name");
-                    final String subject = resultSet.getString("subject");
+                    final int teacherId = resultSet.getInt(ID_FIELD);
+                    final String teacherName = resultSet.getString(NAME_FIELD);
+                    final String subject = resultSet.getString(SUBJECT_FIELD);
                     teachers.add(new Teacher(teacherId, teacherName, subject));
                 }
                 return teachers;

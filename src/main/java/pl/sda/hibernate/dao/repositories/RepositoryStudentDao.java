@@ -10,9 +10,9 @@ import pl.sda.hibernate.services.Screen;
 
 import java.util.List;
 
+@Transactional(readOnly = true)
 @Component
 @ConditionalOnProperty(value = "dao.implementation", havingValue = "repository")
-@Transactional(readOnly = true)
 public class RepositoryStudentDao extends RepositoryBaseDao<Student> implements StudentDao {
 
     private final StudentRepository studentRepository;
