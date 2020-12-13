@@ -3,11 +3,7 @@ package pl.sda.hibernate.dao.jdbc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.sda.hibernate.entity.Course;
 
@@ -16,14 +12,14 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -45,24 +41,30 @@ class JDBCCourseDaoTest {
     private PreparedStatement preparedStatement;
     @Mock
     private ResultSet resultSet;
-    @Mock
+
+//    @Mock   // niemożliwe dla Stub
     private JDBCTransactionManager jdbcTransactionManager;
-    @InjectMocks
+//    @InjectMocks // niemożliwe dla Stub
     private JDBCCourseDao jdbcCourseDao;
 
     @BeforeEach
     void setUp() throws SQLException {
-        when(jdbcTransactionManager
-                .getInTransaction(
-                        ArgumentMatchers.<Function<Connection, List<Course>>>any()
-                )
-        ).thenAnswer(invocation -> {
-            Function function = (Function) invocation.getArgument(0);
-            return function.apply(connection);
-        });
+        // zastąpione przez stub
+//        when(jdbcTransactionManager
+//                .getInTransaction(
+//                        ArgumentMatchers.<Function<Connection, List<Course>>>any()
+//                )
+//        ).thenAnswer(invocation -> {
+//            Function function = (Function) invocation.getArgument(0);
+//            return function.apply(connection);
+//        });
         when(connection.prepareStatement(anyString()))
                 .thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // wymagane dla JDBCTransactionManagerStub
+        jdbcTransactionManager = spy(new JDBCTransactionManagerStub(connection));
+        jdbcCourseDao = new JDBCCourseDao(jdbcTransactionManager);
     }
 
     @Test
@@ -93,7 +95,27 @@ class JDBCCourseDaoTest {
                 .setString(1, testName);
         verify(preparedStatement, times(1)).executeQuery();
         verifyNoMoreInteractions(preparedStatement);
+        verify(jdbcTransactionManager, times(1)).getInTransaction(any());
         assertTrue(actualResult.contains(TEST_COURSE1));
         assertTrue(actualResult.contains(TEST_COURSE2));
+    }
+
+    private static class JDBCTransactionManagerStub extends JDBCTransactionManager {
+        private final Connection connection;
+
+        public JDBCTransactionManagerStub(Connection connection) {
+            super(null);
+            this.connection = connection;
+        }
+
+        @Override
+        public <T> T getInTransaction(Function<Connection, T> connectionFunction) {
+            return connectionFunction.apply(connection);
+        }
+
+        @Override
+        public void doInTransaction(Consumer<Connection> connectionConsumer) {
+            // TODO: implement stub method
+        }
     }
 }
