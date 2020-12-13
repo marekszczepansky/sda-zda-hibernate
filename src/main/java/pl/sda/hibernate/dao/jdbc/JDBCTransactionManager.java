@@ -4,9 +4,6 @@ import org.springframework.stereotype.Component;
 import pl.sda.hibernate.configuration.JDBCConfiguration;
 
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.function.Consumer;
 import java.util.function.Function;
