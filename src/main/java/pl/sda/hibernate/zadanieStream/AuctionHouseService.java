@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class AuctionHouseService {
     private final Screen screen;
+    @VisibleForTest
     Set<Room> rooms = new HashSet<>();
 
     public AuctionHouseService(Screen screen) {
