@@ -5,6 +5,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import pl.sda.hibernate.entity.NamedEntity;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 public abstract class HibernateBaseDao<T extends NamedEntity> implements BaseDao<T> {
     final public SessionFactory sessionFactory;
 
@@ -14,11 +17,15 @@ public abstract class HibernateBaseDao<T extends NamedEntity> implements BaseDao
 
     @Override
     public void create(T entity) {
+        doInTransaction(session -> session.persist(entity));
+    }
+
+    protected void doInTransaction(Consumer<Session> task) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            session.persist(entity);
+            task.accept(session);
 
             tx.commit();
         } catch (Exception ex) {
@@ -27,15 +34,20 @@ public abstract class HibernateBaseDao<T extends NamedEntity> implements BaseDao
             }
             throw ex;
         }
+
     }
 
     protected T findById(Class<T> entityType, int id) {
+        return getInTransaction(session -> session.find(entityType, id));
+    }
+
+    protected <K> K getInTransaction(Function<Session, K> task) {
         Transaction tx = null;
-        T course;
+        K entity;
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            course = session.find(entityType, id);
+            entity = task.apply(session);
 
             tx.commit();
         } catch (Exception ex) {
@@ -44,6 +56,6 @@ public abstract class HibernateBaseDao<T extends NamedEntity> implements BaseDao
             }
             throw ex;
         }
-        return course;
+        return entity;
     }
 }

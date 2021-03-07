@@ -84,47 +84,18 @@ public class HibernateApp {
 
     private static void findCourseByIdAndUpdate(int id) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
 
-            final Course course = session.find(Course.class, id);
-            System.out.printf("course with id %d foud: %s\n%s\n", id, course.getName(), course);
-            course.setName("course name updated");
-            tx.commit();
-            session.evict(course);
-            tx = session.beginTransaction();
-            course.setName("updated in new transaction after evict");
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
-        System.out.println(getCloseInfo());
+        final Course courseNameUpdated = courseDao
+                .updateNameById(id, "course name updated");
+        System.out.printf("New course name: %s\n", courseNameUpdated.getName());
     }
 
     private static void findCourseByNameLike(String term) {
         System.out.println(getOpenInfo());
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
 
-            final Query<Course> courseQuery = session.createQuery(
-                    "select c from Course c where name like :nameparam",
-                    Course.class);
-            courseQuery.setParameter("nameparam", term);
-            final List<Course> resultList = courseQuery.getResultList();
-            resultList.forEach(courseItem -> System.out.println("course found: " + courseItem));
+        final List<Course> resultList = courseDao.findByNameLike(term);
+        resultList.forEach(courseItem -> System.out.println("course found: " + courseItem));
 
-            tx.commit();
-        } catch (Exception ex) {
-            if (tx != null && !tx.getRollbackOnly()) {
-                tx.rollback();
-            }
-            throw ex;
-        }
         System.out.println(getCloseInfo());
     }
 
@@ -235,7 +206,8 @@ public class HibernateApp {
     }
 
     private static String getOpenInfo() {
-        return String.format("\n<-----------\n-= Method %s called =-\n", Thread.currentThread().getStackTrace()[2].getMethodName());
+        return String.format("\n<-----------\n-= Method %s called =-\n", Thread.currentThread()
+                .getStackTrace()[2].getMethodName());
     }
 
     private static String getCloseInfo() {
